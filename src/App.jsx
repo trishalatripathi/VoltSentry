@@ -1,6 +1,22 @@
-import './App.css'
+import "./App.css";
 
-function App() {
+import StatCard from "./components/StatCard";
+import SafetyRisk from "./components/SafetyRisk";
+import DegradationChart from "./components/DegradationChart";
+import PassportPreview from "./components/PassportPreview";
+import DegradationFactors from "./components/DegradationFactors";
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+import DigitalPassport from "./pages/DigitalPassport";
+import AnalyzeBattery from "./pages/AnalyzeBattery";
+import MyBatteries from "./pages/MyBatteries";
+function Dashboard() {
+  const navigate = useNavigate();
   return (
     <div className="app">
 
@@ -9,10 +25,35 @@ function App() {
         <h2 className="logo">⚡ BatteryX</h2>
 
         <nav>
-          <button className="nav-item active">Dashboard</button>
-          <button className="nav-item">My Batteries</button>
-          <button className="nav-item">Analysis</button>
-          <button className="nav-item">Digital Passport</button>
+        <button
+          className="nav-item active"
+          onClick={() => navigate("/")}
+        >
+          Dashboard
+        </button>
+
+        <button
+          className="nav-item"
+          onClick={() => navigate("/batteries")}
+        >
+          My Batteries
+        </button>
+
+        
+
+        <button
+          className="nav-item"
+          onClick={() => navigate("/analyze")}
+        >
+          Analysis
+        </button>
+
+        <button
+          className="nav-item"
+          onClick={() => navigate("/passport")}
+        >
+          Digital Passport
+        </button>
         </nav>
       </aside>
 
@@ -25,37 +66,41 @@ function App() {
             <p>Monitor your EV battery health and safety</p>
           </div>
 
-          <button className="analyze-btn">
-            + Analyze Battery
+          <button
+            className="analyze-btn"
+            onClick={() => navigate("/analyze")}
+          >
+            🔋 Analyze Battery
           </button>
         </header>
 
         {/* Statistics */}
         <section className="stats">
 
-          <div className="stat-card">
-            <p>Battery Health</p>
-            <h2>87%</h2>
-            <span className="status good">Good</span>
-          </div>
+          <StatCard
+            title="Battery Health"
+            value="87"
+            unit="%"
+            status="Good"
+          />
 
-          <div className="stat-card">
-            <p>Safety Risk</p>
-            <h2>Low</h2>
-            <span className="status good">Safe</span>
-          </div>
+          <StatCard
+            title="Safety Risk"
+            value="Low"
+            status="Safe"
+          />
 
-          <div className="stat-card">
-            <p>Charging Cycles</p>
-            <h2>742</h2>
-            <span>Cycles</span>
-          </div>
+          <StatCard
+            title="Charging Cycles"
+            value="742"
+            unit="Cycles"
+          />
 
-          <div className="stat-card">
-            <p>Current Capacity</p>
-            <h2>52.2</h2>
-            <span>kWh</span>
-          </div>
+          <StatCard
+            title="Current Capacity"
+            value="52.2"
+            unit="kWh"
+          />
 
         </section>
 
@@ -93,6 +138,21 @@ function App() {
 
         </section>
 
+        {/* Safety Risk + Degradation Analysis */}
+        <div className="analysis-row">
+
+          <SafetyRisk />
+
+          <div>
+            <DegradationChart />
+            <DegradationFactors />
+          </div>
+
+        </div>
+
+        {/* Second-Life Passport */}
+        <PassportPreview />
+
         {/* Disclaimer */}
         <footer>
           <p>
@@ -104,7 +164,34 @@ function App() {
       </main>
 
     </div>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        {/* Dashboard */}
+        <Route path="/" element={<Dashboard />} />
+
+        {/* Digital Passport */}
+        <Route
+          path="/passport"
+          element={<DigitalPassport />}
+        />
+        <Route
+          path="/analyze"
+          element={<AnalyzeBattery />}
+        />
+        <Route
+          path="/batteries"
+          element={<MyBatteries />}
+        />
+
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;

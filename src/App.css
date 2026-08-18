@@ -224,3 +224,564 @@ footer {
     padding: 20px;
   }
 }
+
+.safety-risk {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  margin-top: 24px;
+}
+
+.safety-risk h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.risk-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.risk-item:last-child {
+  border-bottom: none;
+}
+
+.risk-low {
+  color: #198754;
+  font-weight: 600;
+}
+
+.risk-medium {
+  color: #d97706;
+  font-weight: 600;
+}
+.analysis-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.analysis-row .safety-risk {
+  margin-top: 0;
+}
+
+.degradation-chart {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.degradation-chart h2 {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.chart-subtitle {
+  margin-top: 0;
+  color: #777;
+  font-size: 14px;
+}
+.passport-preview {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.passport-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.passport-header h2 {
+  margin: 0;
+}
+
+.passport-header p {
+  margin: 6px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.passport-arrow {
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.passport-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.passport-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.passport-info span {
+  color: #777;
+  font-size: 13px;
+}
+
+.passport-info strong {
+  font-size: 15px;
+}
+
+.verified {
+  color: #198754;
+}
+
+.passport-description {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+.degradation-factors {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.degradation-rate {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.degradation-rate span {
+  color: #777;
+}
+
+.degradation-rate strong {
+  font-size: 24px;
+}
+
+.degradation-factors h3 {
+  margin-bottom: 20px;
+}
+
+.factor {
+  margin-bottom: 18px;
+}
+
+.factor > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+
+.factor span {
+  font-weight: 600;
+}
+
+.factor small {
+  color: #777;
+}
+
+.factor-bar {
+  height: 8px;
+  background: #eeeeee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.factor-fill {
+  height: 100%;
+  background: #333;
+  border-radius: 10px;
+}
+/* Digital Passport Page */
+
+.digital-passport {
+  padding: 32px;
+}
+
+.passport-page-header {
+  margin-bottom: 30px;
+}
+
+.passport-page-header h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.passport-page-header p {
+  margin-top: 8px;
+  color: #777;
+}
+
+.passport-section {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.passport-section h2 {
+  margin-top: 0;
+  margin-bottom: 22px;
+}
+
+.passport-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.passport-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 16px;
+  background: #f8f8f8;
+  border-radius: 10px;
+}
+
+.passport-field span {
+  font-size: 13px;
+  color: #777;
+}
+
+.passport-field strong {
+  font-size: 16px;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.history-card {
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 12px;
+}
+
+.history-card h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.history-value {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.history-value strong {
+  font-size: 24px;
+}
+
+.history-value span {
+  color: #777;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.verification-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 12px;
+}
+
+.verification-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  background: #e8f7ee;
+  color: #198754;
+}
+
+.verification-card h3 {
+  margin: 0;
+}
+
+.verification-card p {
+  margin: 5px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.verification-status {
+  margin-left: auto;
+  font-weight: 600;
+  color: #198754;
+}
+/* Analyze Battery Page */
+
+.analyze-page {
+  min-height: 100vh;
+  padding: 40px;
+  background: #f7f8fa;
+}
+
+.analyze-header {
+  margin-bottom: 30px;
+}
+
+.analyze-header h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.analyze-header p {
+  margin-top: 8px;
+  color: #777;
+}
+
+.battery-form {
+  max-width: 800px;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  padding: 12px 14px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #333333;
+}
+
+.analyze-submit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #111111;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.analyze-submit-btn:hover {
+  opacity: 0.9;
+}
+/* Battery Data Upload */
+
+.form-section-title {
+  margin-bottom: 20px;
+}
+
+.form-section-title h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.form-section-title p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.battery-data-title {
+  margin-top: 30px;
+}
+
+.upload-box {
+  border: 2px dashed #d5d5d5;
+  border-radius: 12px;
+  padding: 35px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.upload-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.upload-box h3 {
+  margin: 5px 0;
+}
+
+.upload-box p {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.file-upload-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  background: #111;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.selected-file {
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.back-btn {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+/* My Batteries Page */
+
+.my-batteries-page {
+  min-height: 100vh;
+  padding: 32px;
+  background: #f7f8fa;
+}
+
+.my-batteries-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.my-batteries-header h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.my-batteries-header p {
+  margin-top: 8px;
+  color: #777;
+}
+
+.battery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.battery-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.battery-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.battery-card-header h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.battery-card-header span {
+  color: #777;
+  font-size: 13px;
+}
+
+.risk-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px !important;
+  font-weight: 600;
+}
+
+.risk-badge.low {
+  background: #e8f7ee;
+  color: #198754;
+}
+
+.risk-badge.medium {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.battery-details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 22px 0;
+}
+
+.battery-details div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.battery-details span {
+  color: #777;
+  font-size: 13px;
+}
+
+.battery-details strong {
+  font-size: 17px;
+}
+
+.battery-card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.secondary-btn {
+  padding: 10px 16px;
+  border: 1px solid #dddddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.secondary-btn:hover {
+  background: #f5f5f5;
+}
