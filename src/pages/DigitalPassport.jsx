@@ -1,45 +1,99 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function DigitalPassport() {
   const navigate = useNavigate();
 
-  const [batteryData] = useState(() => {
+  const [batteryData, setBatteryData] = useState(null);
+
+  useEffect(() => {
     const savedData = localStorage.getItem("batteryData");
 
-    return savedData
-      ? JSON.parse(savedData)
-      : {
-          vehicleNumber: "OD-02-AB-1234",
-          vehicleName: "Tata Nexon EV",
-          batteryId: "BX-2026-001",
+    if (savedData) {
+      try {
+        setBatteryData(JSON.parse(savedData));
+      } catch (error) {
+        console.error("Error reading battery data:", error);
+      }
+    }
+  }, []);
 
-          manufacturer: "Example Motors",
-          manufacturingDate: "March 2023",
+  const data = batteryData || {};
 
-          lifetimeCycles: 742,
+  // Values that are actually available
+  const vehicleNumber =
+    data.vehicleNumber || "Not available";
 
-          averageTemperature: 32,
-          maximumTemperature: 41,
+  const vehicleName =
+    data.vehicleName || "Not available";
 
-          averageCellVoltageDelta: 26.4,
-          maximumCellVoltageDelta: 51.2,
+  const batteryId =
+    data.batteryId || "Not available";
 
-          averageSOC: 68.2,
+  const lifetimeCycles =
+    data.lifetimeCycles ?? "Not available";
 
-          fastChargingUsage: 28,
+  const maximumTemperature =
+    data.maximumTemperature ?? "Not available";
 
-          initialSOH: 96,
-          currentSOH: 87,
+  const maximumCellVoltageDelta =
+    data.maximumCellVoltageDelta ?? "Not available";
 
-          verificationStatus: "Verified",
-        };
-  });
+  const maximumCurrent =
+    data.maximumCurrent ?? "Not available";
+
+  const currentSOC =
+    data.currentSOC ?? "Not available";
+
+  const recordCount =
+    data.recordCount ?? "Not available";
+
+  /*
+   * SOH is not currently coming from the uploaded CSV analysis.
+   * Do NOT display a fake percentage.
+   */
+  const currentSOH =
+    data.currentSOH ?? null;
+
+  const initialSOH =
+    data.initialSOH ?? null;
+
+  /*
+   * These are not currently supplied by the analysis.
+   */
+  const manufacturer =
+    data.manufacturer || "Not available";
+
+  const manufacturingDate =
+    data.manufacturingDate || "Not available";
+
+  const fastChargingUsage =
+    data.fastChargingUsage ?? null;
+
+  /*
+   * Calculate battery condition based on information
+   * that we actually have.
+   */
+  let batteryCondition = "Needs Assessment";
+  let suitability = "Further Testing Required";
+
+  if (currentSOH !== null) {
+    if (currentSOH >= 80) {
+      batteryCondition = "Good";
+      suitability = "Potentially Reusable";
+    } else if (currentSOH >= 60) {
+      batteryCondition = "Moderate";
+      suitability = "Further Assessment Required";
+    } else {
+      batteryCondition = "Poor";
+      suitability = "Recycling Recommended";
+    }
+  }
 
   return (
     <div className="digital-passport">
 
-      {/* Back button */}
+      {/* Back */}
       <button
         className="back-btn"
         onClick={() => navigate("/")}
@@ -60,7 +114,7 @@ function DigitalPassport() {
         </div>
 
         <div className="passport-status">
-          ✓ {batteryData.verificationStatus}
+          ✓ {data.verificationStatus || "Analysis Complete"}
         </div>
 
       </div>
@@ -75,19 +129,12 @@ function DigitalPassport() {
 
           <div className="passport-field">
             <span>Vehicle Number</span>
-
-            <strong>
-              {batteryData.vehicleNumber}
-            </strong>
+            <strong>{vehicleNumber}</strong>
           </div>
-
 
           <div className="passport-field">
             <span>Vehicle Name</span>
-
-            <strong>
-              {batteryData.vehicleName}
-            </strong>
+            <strong>{vehicleName}</strong>
           </div>
 
         </div>
@@ -104,36 +151,25 @@ function DigitalPassport() {
 
           <div className="passport-field">
             <span>Battery ID</span>
-
-            <strong>
-              {batteryData.batteryId}
-            </strong>
+            <strong>{batteryId}</strong>
           </div>
-
 
           <div className="passport-field">
             <span>Manufacturer</span>
-
-            <strong>
-              {batteryData.manufacturer}
-            </strong>
+            <strong>{manufacturer}</strong>
           </div>
-
 
           <div className="passport-field">
             <span>Manufacturing Date</span>
-
-            <strong>
-              {batteryData.manufacturingDate}
-            </strong>
+            <strong>{manufacturingDate}</strong>
           </div>
-
 
           <div className="passport-field">
             <span>Lifetime Cycles</span>
-
             <strong>
-              {batteryData.lifetimeCycles} cycles
+              {lifetimeCycles !== "Not available"
+                ? `${lifetimeCycles} cycles`
+                : "Not available"}
             </strong>
           </div>
 
@@ -150,31 +186,17 @@ function DigitalPassport() {
         <div className="history-grid">
 
 
-          {/* Temperature History */}
+          {/* Temperature */}
           <div className="history-card">
 
-            <h3>
-              🌡️ Temperature History
-            </h3>
-
+            <h3>🌡️ Temperature History</h3>
 
             <div className="history-value">
 
               <strong>
-                {batteryData.averageTemperature}°C
-              </strong>
-
-              <span>
-                Average Temperature
-              </span>
-
-            </div>
-
-
-            <div className="history-value">
-
-              <strong>
-                {batteryData.maximumTemperature}°C
+                {maximumTemperature !== "Not available"
+                  ? `${maximumTemperature}°C`
+                  : "Not available"}
               </strong>
 
               <span>
@@ -183,21 +205,32 @@ function DigitalPassport() {
 
             </div>
 
+            <div className="history-value">
+
+              <strong>
+                Not available
+              </strong>
+
+              <span>
+                Average Temperature
+              </span>
+
+            </div>
+
           </div>
 
 
-          {/* Charging History */}
+          {/* Charging */}
           <div className="history-card">
 
-            <h3>
-              🔋 Charging History
-            </h3>
-
+            <h3>🔋 Charging History</h3>
 
             <div className="history-value">
 
               <strong>
-                {batteryData.lifetimeCycles}
+                {lifetimeCycles !== "Not available"
+                  ? lifetimeCycles
+                  : "Not available"}
               </strong>
 
               <span>
@@ -206,11 +239,12 @@ function DigitalPassport() {
 
             </div>
 
-
             <div className="history-value">
 
               <strong>
-                {batteryData.fastChargingUsage}%
+                {fastChargingUsage !== null
+                  ? `${fastChargingUsage}%`
+                  : "Not available"}
               </strong>
 
               <span>
@@ -222,18 +256,17 @@ function DigitalPassport() {
           </div>
 
 
-          {/* SOH History */}
+          {/* SOH */}
           <div className="history-card">
 
-            <h3>
-              📊 State of Health History
-            </h3>
-
+            <h3>📊 State of Health History</h3>
 
             <div className="history-value">
 
               <strong>
-                {batteryData.initialSOH}%
+                {initialSOH !== null
+                  ? `${initialSOH}%`
+                  : "Not available"}
               </strong>
 
               <span>
@@ -242,11 +275,12 @@ function DigitalPassport() {
 
             </div>
 
-
             <div className="history-value">
 
               <strong>
-                {batteryData.currentSOH}%
+                {currentSOH !== null
+                  ? `${currentSOH}%`
+                  : "Not available"}
               </strong>
 
               <span>
@@ -258,18 +292,15 @@ function DigitalPassport() {
           </div>
 
 
-          {/* Cell Imbalance */}
+          {/* Cell Diagnostics */}
           <div className="history-card">
 
-            <h3>
-              ⚡ Cell Diagnostics
-            </h3>
-
+            <h3>⚡ Cell Diagnostics</h3>
 
             <div className="history-value">
 
               <strong>
-                {batteryData.averageCellVoltageDelta} mV
+                Not available
               </strong>
 
               <span>
@@ -278,11 +309,12 @@ function DigitalPassport() {
 
             </div>
 
-
             <div className="history-value">
 
               <strong>
-                {batteryData.maximumCellVoltageDelta} mV
+                {maximumCellVoltageDelta !== "Not available"
+                  ? `${maximumCellVoltageDelta} mV`
+                  : "Not available"}
               </strong>
 
               <span>
@@ -297,28 +329,26 @@ function DigitalPassport() {
           {/* Usage */}
           <div className="history-card">
 
-            <h3>
-              🔄 Usage History
-            </h3>
-
+            <h3>🔄 Usage History</h3>
 
             <div className="history-value">
 
               <strong>
-                {batteryData.averageSOC}%
+                {currentSOC !== "Not available"
+                  ? `${currentSOC}%`
+                  : "Not available"}
               </strong>
 
               <span>
-                Average State of Charge
+                Current State of Charge
               </span>
 
             </div>
 
-
             <div className="history-value">
 
               <strong>
-                {batteryData.csvRows || "—"}
+                {recordCount}
               </strong>
 
               <span>
@@ -329,18 +359,16 @@ function DigitalPassport() {
 
           </div>
 
+
         </div>
 
       </section>
 
 
-      {/* Verification Status */}
+      {/* Verification */}
       <section className="passport-section">
 
-        <h2>
-          Verification Status
-        </h2>
-
+        <h2>Verification Status</h2>
 
         <div className="verification-card">
 
@@ -348,22 +376,21 @@ function DigitalPassport() {
             ✓
           </div>
 
-
           <div className="verification-content">
 
             <h3>
-              Battery Verified
+              Battery Data Processed
             </h3>
 
             <p>
-              Battery identity and recorded history have been verified.
+              Battery identity and uploaded telemetry
+              data have been successfully processed.
             </p>
 
           </div>
 
-
           <span className="verification-status">
-            {batteryData.verificationStatus}
+            {data.verificationStatus || "Processed"}
           </span>
 
         </div>
@@ -371,24 +398,21 @@ function DigitalPassport() {
       </section>
 
 
-      {/* Second-Life Suitability */}
+      {/* Second Life */}
       <section className="passport-section">
 
-        <h2>
-          Second-Life Information
-        </h2>
-
+        <h2>Second-Life Information</h2>
 
         <div className="second-life-card">
 
           <div>
 
-            <span>
-              Current SOH
-            </span>
+            <span>Current SOH</span>
 
             <strong>
-              {batteryData.currentSOH}%
+              {currentSOH !== null
+                ? `${currentSOH}%`
+                : "Not available"}
             </strong>
 
           </div>
@@ -396,14 +420,10 @@ function DigitalPassport() {
 
           <div>
 
-            <span>
-              Battery Condition
-            </span>
+            <span>Battery Condition</span>
 
             <strong>
-              {batteryData.currentSOH >= 80
-                ? "Good"
-                : "Needs Assessment"}
+              {batteryCondition}
             </strong>
 
           </div>
@@ -411,26 +431,21 @@ function DigitalPassport() {
 
           <div>
 
-            <span>
-              Estimated Suitability
-            </span>
+            <span>Estimated Suitability</span>
 
             <strong>
-              {batteryData.currentSOH >= 80
-                ? "Potentially Reusable"
-                : "Further Testing Required"}
+              {suitability}
             </strong>
 
           </div>
 
         </div>
 
-
         <p className="passport-note">
 
-          Second-life suitability is an estimate based on available battery
-          health and history data and should be confirmed through certified
-          testing.
+          Second-life suitability is an estimate based on
+          available battery health and history data and
+          should be confirmed through certified testing.
 
         </p>
 
@@ -440,8 +455,9 @@ function DigitalPassport() {
       {/* Disclaimer */}
       <footer className="passport-disclaimer">
 
-        ⚠️ Battery health, safety and second-life suitability results are
-        estimates and do not replace certified battery testing.
+        ⚠️ Battery health, safety and second-life suitability
+        results are estimates and do not replace certified
+        battery testing.
 
       </footer>
 

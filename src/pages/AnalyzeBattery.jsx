@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Papa from "papaparse";
 
 function AnalyzeBattery() {
   const navigate = useNavigate();
@@ -12,15 +11,18 @@ function AnalyzeBattery() {
   });
 
   const [file, setFile] = useState(null);
-  const [csvData, setCsvData] = useState([]);
+  const [recordCount, setRecordCount] = useState(0);
+
+  // Store calculated CSV metrics temporarily
+  const [batteryMetrics, setBatteryMetrics] = useState(null);
 
   function handleChange(event) {
     const { name, value } = event.target;
 
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   }
 
   function handleFileChange(event) {
@@ -30,150 +32,314 @@ function AnalyzeBattery() {
 
     setFile(selectedFile);
 
-    Papa.parse(selectedFile, {
-      header: true,
-      skipEmptyLines: true,
+    const reader = new FileReader();
 
-      complete: function (results) {
-        console.log("CSV data:", results.data);
+    reader.onload = (e) => {
+      const text = e.target.result;
 
-        setCsvData(results.data);
-      },
+      const rows = text
+        .trim()
+        .split("\n")
+        .filter((row) => row.trim() !== "");
 
-      error: function (error) {
-        console.error("CSV parsing error:", error);
-        alert("Unable to read the CSV file.");
-      },
-    });
+      if (rows.length < 2) {
+        alert("CSV file does not contain enough data.");
+        return;
+      }
+
+      // First row = column names
+      const headers = rows[0]
+        .split(",")
+        .map((header) => header.trim());
+
+      // Convert CSV rows into objects
+      const data = rows.slice(1).map((row) => {
+        const values = row.split(",");
+        const obj = {};
+
+        headers.forEach((header, index) => {
+          obj[header] = values[index]?.trim();
+        });
+
+        return obj;
+      });
+
+      console.log("CSV Headers:", headers);
+      console.log("CSV Data:", data);
+
+      // --------------------------------
+      // Extract battery values
+      // --------------------------------
+
+      const temperatures = data
+        .map((row) =>
+          Number(row["Battery Temperature (C)"])
+        )
+        .filter((value) => !isNaN(value));
+
+      const currents = data
+        .map((row) =>
+          Math.abs(Number(row["Pack Current (A)"]))
+        )
+        .filter((value) => !isNaN(value));
+
+      const cellDeltas = data
+        .map((row) =>
+          Number(row["Cell Voltage Delta (mV)"])
+        )
+        .filter((value) => !isNaN(value));
+
+      const cycles = data
+        .map((row) =>
+          Number(row["Cycle Index"])
+        )
+        .filter((value) => !isNaN(value));
+
+      const socValues = data
+        .map((row) =>
+          Number(row["State of Charge (%)"])
+        )
+        .filter((value) => !isNaN(value));
+
+      // --------------------------------
+      // Calculate metrics
+      // --------------------------------
+
+      const maximumTemperature =
+        temperatures.length > 0
+          ? Math.max(...temperatures)
+          : 0;
+
+      const averageTemperature =
+        temperatures.length > 0
+          ? temperatures.reduce((a, b) => a + b, 0) /
+            temperatures.length
+          : 0;
+
+      const maximumCurrent =
+        currents.length > 0
+          ? Math.max(...currents)
+          : 0;
+
+      const maximumCellVoltageDelta =
+        cellDeltas.length > 0
+          ? Math.max(...cellDeltas)
+          : 0;
+
+      const averageCellVoltageDelta =
+        cellDeltas.length > 0
+          ? cellDeltas.reduce((a, b) => a + b, 0) /
+            cellDeltas.length
+          : 0;
+
+      const lifetimeCycles =
+        cycles.length > 0
+          ? Math.max(...cycles)
+          : 0;
+
+      const currentSOC =
+        socValues.length > 0
+          ? socValues[socValues.length - 1]
+          : 0;
+
+      const averageSOC =
+        socValues.length > 0
+          ? socValues.reduce((a, b) => a + b, 0) /
+            socValues.length
+          : 0;
+
+      // --------------------------------
+      // Safety Risk
+      // --------------------------------
+
+      let thermalRisk = "Low";
+
+      if (maximumTemperature >= 45) {
+        thermalRisk = "High";
+      } else if (maximumTemperature >= 40) {
+        thermalRisk = "Medium";
+      }
+
+      let electricalRisk = "Low";
+
+      if (maximumCellVoltageDelta >= 80) {
+        electricalRisk = "High";
+      } else if (maximumCellVoltageDelta >= 50) {
+        electricalRisk = "Medium";
+      }
+
+      let chargingRisk = "Low";
+
+      if (maximumCurrent >= 120) {
+        chargingRisk = "High";
+      } else if (maximumCurrent >= 80) {
+        chargingRisk = "Medium";
+      }
+
+      let cellImbalanceRisk = "Low";
+
+      if (maximumCellVoltageDelta >= 80) {
+        cellImbalanceRisk = "High";
+      } else if (maximumCellVoltageDelta >= 50) {
+        cellImbalanceRisk = "Medium";
+      }
+
+      // --------------------------------
+      // Calculate SOH
+      // --------------------------------
+
+      // Simple estimated SOH based on cell voltage condition.
+      // You can replace this later with your actual ML model.
+
+      let currentSOH = 100;
+
+      if (maximumCellVoltageDelta >= 80) {
+        currentSOH = 75;
+      } else if (maximumCellVoltageDelta >= 50) {
+        currentSOH = 82;
+      } else if (maximumCellVoltageDelta >= 30) {
+        currentSOH = 88;
+      } else {
+        currentSOH = 92;
+      }
+
+      // --------------------------------
+      // Store calculated metrics temporarily
+      // --------------------------------
+
+      const metrics = {
+        recordCount: data.length,
+
+        maximumTemperature,
+        averageTemperature,
+
+        maximumCurrent,
+
+        maximumCellVoltageDelta,
+        averageCellVoltageDelta,
+
+        lifetimeCycles,
+
+        currentSOC,
+        averageSOC,
+
+        currentSOH,
+
+        thermalRisk,
+        electricalRisk,
+        chargingRisk,
+        cellImbalanceRisk,
+
+        rawData: data,
+      };
+
+      setBatteryMetrics(metrics);
+      setRecordCount(data.length);
+
+      console.log("Calculated Battery Metrics:", metrics);
+    };
+
+    reader.readAsText(selectedFile);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    if (!file) {
+    // Check vehicle information
+    if (
+      !formData.vehicleNumber.trim() ||
+      !formData.vehicleName.trim() ||
+      !formData.batteryId.trim()
+    ) {
+      alert(
+        "Please enter Vehicle Number, Vehicle Name and Battery ID."
+      );
+      return;
+    }
+
+    // Check CSV
+    if (!file || !batteryMetrics) {
       alert("Please upload a battery data CSV file.");
       return;
     }
 
-    if (csvData.length === 0) {
-      alert("The CSV file does not contain readable data.");
-      return;
-    }
+    // --------------------------------
+    // FINAL ANALYSIS OBJECT
+    // --------------------------------
 
-    // Convert CSV values from strings to numbers
-    const temperatures = csvData
-      .map(row => Number(row["Battery Temperature (C)"]))
-      .filter(value => !isNaN(value));
+    const analysis = {
+      // User entered information
+      vehicleNumber: formData.vehicleNumber.trim(),
+      vehicleName: formData.vehicleName.trim(),
+      batteryId: formData.batteryId.trim(),
 
-    const cellVoltageDeltas = csvData
-      .map(row => Number(row["Cell Voltage Delta (mV)"]))
-      .filter(value => !isNaN(value));
+      // Battery metrics
+      recordCount: batteryMetrics.recordCount,
 
-    const socValues = csvData
-      .map(row => Number(row["State of Charge (%)"]))
-      .filter(value => !isNaN(value));
+      maximumTemperature:
+        batteryMetrics.maximumTemperature,
 
-    const currents = csvData
-      .map(row => Number(row["Pack Current (A)"]))
-      .filter(value => !isNaN(value));
+      averageTemperature:
+        batteryMetrics.averageTemperature,
 
-    const cycleIndexes = csvData
-      .map(row => Number(row["Cycle Index"]))
-      .filter(value => !isNaN(value));
+      maximumCurrent:
+        batteryMetrics.maximumCurrent,
 
-    // Calculate temperature statistics
-    const averageTemperature =
-      temperatures.reduce((sum, value) => sum + value, 0) /
-      temperatures.length;
+      maximumCellVoltageDelta:
+        batteryMetrics.maximumCellVoltageDelta,
 
-    const maximumTemperature = Math.max(...temperatures);
+      averageCellVoltageDelta:
+        batteryMetrics.averageCellVoltageDelta,
 
-    // Calculate cell imbalance statistics
-    const averageCellVoltageDelta =
-      cellVoltageDeltas.reduce((sum, value) => sum + value, 0) /
-      cellVoltageDeltas.length;
+      lifetimeCycles:
+        batteryMetrics.lifetimeCycles,
 
-    const maximumCellVoltageDelta = Math.max(...cellVoltageDeltas);
+      currentSOC:
+        batteryMetrics.currentSOC,
 
-    // Calculate SOC
-    const averageSOC =
-      socValues.reduce((sum, value) => sum + value, 0) /
-      socValues.length;
+      averageSOC:
+        batteryMetrics.averageSOC,
 
-    // Calculate current
-    const averageCurrent =
-      currents.reduce((sum, value) => sum + value, 0) /
-      currents.length;
+      currentSOH:
+        batteryMetrics.currentSOH,
 
-    const maximumCurrent = Math.max(...currents);
-    const minimumCurrent = Math.min(...currents);
+      // Risks
+      thermalRisk:
+        batteryMetrics.thermalRisk,
 
-    // Latest cycle
-    const latestCycle = Math.max(...cycleIndexes);
+      electricalRisk:
+        batteryMetrics.electricalRisk,
 
-    // Store everything
-    const batteryData = {
-      vehicleNumber: formData.vehicleNumber,
-      vehicleName: formData.vehicleName,
-      batteryId: formData.batteryId,
+      chargingRisk:
+        batteryMetrics.chargingRisk,
 
-      manufacturer: "Example Motors",
-      manufacturingDate: "March 2023",
+      cellImbalanceRisk:
+        batteryMetrics.cellImbalanceRisk,
 
-      // CSV information
-      csvRows: csvData.length,
-      uploadedFile: file.name,
-
-      // Real CSV calculations
-      averageTemperature: Number(averageTemperature.toFixed(2)),
-      maximumTemperature: Number(maximumTemperature.toFixed(2)),
-
-      averageCellVoltageDelta: Number(
-        averageCellVoltageDelta.toFixed(2)
-      ),
-
-      maximumCellVoltageDelta: Number(
-        maximumCellVoltageDelta.toFixed(2)
-      ),
-
-      averageSOC: Number(averageSOC.toFixed(2)),
-
-      averageCurrent: Number(
-        averageCurrent.toFixed(2)
-      ),
-
-      maximumCurrent: Number(
-        maximumCurrent.toFixed(2)
-      ),
-
-      minimumCurrent: Number(
-        minimumCurrent.toFixed(2)
-      ),
-
-      lifetimeCycles: latestCycle,
-
-      // Keep SOH separate because CSV doesn't contain SOH
-      currentSOH: 87,
-      initialSOH: 96,
-
+      // Verification
       verificationStatus: "Verified",
+
+      // Keep CSV
+      rawData:
+        batteryMetrics.rawData,
     };
 
-    console.log("Calculated battery data:");
-    console.log(batteryData);
+    // --------------------------------
+    // SAVE EVERYTHING
+    // --------------------------------
 
     localStorage.setItem(
       "batteryData",
-      JSON.stringify(batteryData)
+      JSON.stringify(analysis)
     );
+
+    console.log("FINAL SAVED BATTERY DATA:", analysis);
 
     alert(
-      `Battery data analyzed successfully!\n\n` +
-      `${csvData.length} records processed.\n` +
-      `Latest cycle: ${latestCycle}\n` +
-      `Maximum temperature: ${maximumTemperature.toFixed(1)}°C`
+      `Battery data submitted successfully!\n\n${batteryMetrics.recordCount} records detected.`
     );
 
+    // Go to dashboard
     navigate("/");
   }
 
@@ -204,7 +370,6 @@ function AnalyzeBattery() {
           </p>
         </div>
 
-        {/* Vehicle Number */}
         <div className="form-group">
           <label htmlFor="vehicleNumber">
             Vehicle Number
@@ -221,7 +386,6 @@ function AnalyzeBattery() {
           />
         </div>
 
-        {/* Vehicle Name */}
         <div className="form-group">
           <label htmlFor="vehicleName">
             Vehicle Name
@@ -238,7 +402,6 @@ function AnalyzeBattery() {
           />
         </div>
 
-        {/* Battery ID */}
         <div className="form-group">
           <label htmlFor="batteryId">
             Battery ID
@@ -264,7 +427,6 @@ function AnalyzeBattery() {
           </p>
         </div>
 
-        {/* Upload Box */}
         <div className="upload-box">
 
           <div className="upload-icon">
@@ -301,9 +463,9 @@ function AnalyzeBattery() {
             </div>
           )}
 
-          {csvData.length > 0 && (
-            <div className="selected-file">
-              ✓ {csvData.length} records detected
+          {recordCount > 0 && (
+            <div className="record-count">
+              ✓ {recordCount} records detected
             </div>
           )}
 

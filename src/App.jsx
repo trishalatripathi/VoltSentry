@@ -14,41 +14,108 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+
 import DigitalPassport from "./pages/DigitalPassport";
 import AnalyzeBattery from "./pages/AnalyzeBattery";
 import MyBatteries from "./pages/MyBatteries";
+
+
 function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [batteryData, setBatteryData] = useState(null);
 
-  useEffect(() => {
-    const savedData = localStorage.getItem("batteryData");
 
-    if (savedData) {
-      setBatteryData(JSON.parse(savedData));
+  // Load saved battery data
+  useEffect(() => {
+    try {
+      const savedData = localStorage.getItem("batteryData");
+
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+
+        if (parsedData && !Array.isArray(parsedData)) {
+          setBatteryData(parsedData);
+        }
+      }
+    } catch (error) {
+      console.error("Error loading battery data:", error);
+
+      localStorage.removeItem("batteryData");
+      setBatteryData(null);
     }
   }, []);
 
-  // Default values before a battery is analyzed
-  const data = batteryData || {
-    vehicleName: "Tata Nexon EV",
-    batteryId: "BX-2026-001",
 
-    currentSOH: 87,
-    averageTemperature: 32,
-    maximumTemperature: 41,
+  // Safe default values
+  const data = {
+    vehicleName:
+      batteryData?.vehicleName || "Tata Nexon EV",
 
-    lifetimeCycles: 742,
+    batteryId:
+      batteryData?.batteryId || "BX-2026-001",
 
-    averageCellVoltageDelta: 26.4,
-    maximumCellVoltageDelta: 51.2,
+    currentSOH:
+      batteryData?.currentSOH ?? 87,
 
-    averageSOC: 68.2,
+    averageTemperature:
+      batteryData?.averageTemperature ?? 32,
 
-    verificationStatus: "Verified",
+    maximumTemperature:
+      batteryData?.maximumTemperature ?? 41,
+
+    lifetimeCycles:
+      batteryData?.lifetimeCycles ?? 742,
+
+    averageCellVoltageDelta:
+      batteryData?.averageCellVoltageDelta ?? 26.4,
+
+    maximumCellVoltageDelta:
+      batteryData?.maximumCellVoltageDelta ?? 51.2,
+
+    averageSOC:
+      batteryData?.averageSOC ?? 68.2,
+
+    verificationStatus:
+      batteryData?.verificationStatus || "Verified",
+
+    thermalRisk:
+      batteryData?.thermalRisk || "Low",
+
+    electricalRisk:
+      batteryData?.electricalRisk || "Low",
+
+    chargingRisk:
+      batteryData?.chargingRisk || "Low",
+
+    cellImbalanceRisk:
+      batteryData?.cellImbalanceRisk || "Low",
   };
+
+
+  // Overall safety risk
+  const overallRisk =
+    data.thermalRisk === "High" ||
+    data.electricalRisk === "High" ||
+    data.chargingRisk === "High" ||
+    data.cellImbalanceRisk === "High"
+      ? "High"
+      : data.thermalRisk === "Medium" ||
+        data.electricalRisk === "Medium" ||
+        data.chargingRisk === "Medium" ||
+        data.cellImbalanceRisk === "Medium"
+      ? "Medium"
+      : "Low";
+
+
+  const riskStatus =
+    overallRisk === "Low"
+      ? "Safe"
+      : overallRisk === "Medium"
+      ? "Monitor"
+      : "Attention";
+
 
   return (
     <div className="app">
@@ -57,7 +124,7 @@ function Dashboard() {
       <aside className="sidebar">
 
         <h2 className="logo">
-          ⚡ BatteryX
+          ⚡ VoltSentry
         </h2>
 
         <nav>
@@ -71,27 +138,36 @@ function Dashboard() {
             Dashboard
           </button>
 
+
           <button
             className={`nav-item ${
-              location.pathname === "/batteries" ? "active" : ""
+              location.pathname === "/batteries"
+                ? "active"
+                : ""
             }`}
             onClick={() => navigate("/batteries")}
           >
             My Batteries
           </button>
 
+
           <button
             className={`nav-item ${
-              location.pathname === "/analyze" ? "active" : ""
+              location.pathname === "/analyze"
+                ? "active"
+                : ""
             }`}
             onClick={() => navigate("/analyze")}
           >
             Analysis
           </button>
 
+
           <button
             className={`nav-item ${
-              location.pathname === "/passport" ? "active" : ""
+              location.pathname === "/passport"
+                ? "active"
+                : ""
             }`}
             onClick={() => navigate("/passport")}
           >
@@ -103,21 +179,27 @@ function Dashboard() {
       </aside>
 
 
-      {/* Main content */}
+      {/* Main Content */}
       <main className="main-content">
+
 
         {/* Header */}
         <header className="header">
 
           <div>
-            <h1>Battery Dashboard</h1>
+
+            <h1>
+              Battery Dashboard
+            </h1>
 
             <p>
               {batteryData
                 ? `Monitoring ${data.vehicleName}`
                 : "Monitor your EV battery health and safety"}
             </p>
+
           </div>
+
 
           <button
             className="analyze-btn"
@@ -139,27 +221,20 @@ function Dashboard() {
             status="Good"
           />
 
+
           <StatCard
             title="Safety Risk"
-            value={
-              data.maximumTemperature > 40 ||
-              data.maximumCellVoltageDelta > 50
-                ? "Medium"
-                : "Low"
-            }
-            status={
-              data.maximumTemperature > 40 ||
-              data.maximumCellVoltageDelta > 50
-                ? "Monitor"
-                : "Safe"
-            }
+            value={overallRisk}
+            status={riskStatus}
           />
+
 
           <StatCard
             title="Charging Cycles"
             value={data.lifetimeCycles}
             unit="Cycles"
           />
+
 
           <StatCard
             title="Average SOC"
@@ -173,11 +248,13 @@ function Dashboard() {
         {/* Battery Overview */}
         <section className="overview">
 
+
           <div className="panel">
 
             <h2>
               Battery Overview
             </h2>
+
 
             <div className="battery-circle">
 
@@ -191,11 +268,17 @@ function Dashboard() {
 
             </div>
 
+
             <p>
+
               Battery health is currently{" "}
+
               <strong>
-                {data.currentSOH >= 80 ? "Good" : "Needs Attention"}
+                {data.currentSOH >= 80
+                  ? "Good"
+                  : "Needs Attention"}
               </strong>.
+
             </p>
 
           </div>
@@ -208,6 +291,7 @@ function Dashboard() {
               Quick Actions
             </h2>
 
+
             <button
               className="action-btn"
               onClick={() => navigate("/analyze")}
@@ -215,12 +299,14 @@ function Dashboard() {
               🔋 Analyze Battery
             </button>
 
+
             <button
               className="action-btn"
               onClick={() => navigate("/analyze")}
             >
               📊 View Analysis
             </button>
+
 
             <button
               className="action-btn"
@@ -239,10 +325,13 @@ function Dashboard() {
 
           <SafetyRisk />
 
+
           <div>
+
             <DegradationChart />
 
             <DegradationFactors />
+
           </div>
 
         </div>
@@ -268,31 +357,49 @@ function Dashboard() {
   );
 }
 
+
+
 function App() {
+
   return (
+
     <BrowserRouter>
+
       <Routes>
 
         {/* Dashboard */}
-        <Route path="/" element={<Dashboard />} />
+        <Route
+          path="/"
+          element={<Dashboard />}
+        />
+
 
         {/* Digital Passport */}
         <Route
           path="/passport"
           element={<DigitalPassport />}
         />
+
+
+        {/* Analyze Battery */}
         <Route
           path="/analyze"
           element={<AnalyzeBattery />}
         />
+
+
+        {/* My Batteries */}
         <Route
           path="/batteries"
           element={<MyBatteries />}
         />
 
       </Routes>
+
     </BrowserRouter>
+
   );
 }
+
 
 export default App;

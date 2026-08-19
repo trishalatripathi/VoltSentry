@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import {
   LineChart,
   Line,
@@ -6,53 +8,141 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from "recharts"
-
-const data = [
-  { month: "Jan", soh: 96 },
-  { month: "Feb", soh: 95 },
-  { month: "Mar", soh: 94 },
-  { month: "Apr", soh: 92 },
-  { month: "May", soh: 91 },
-  { month: "Jun", soh: 89 },
-  { month: "Jul", soh: 88 },
-  { month: "Aug", soh: 87 },
-]
+} from "recharts";
 
 function DegradationChart() {
+  const [chartData, setChartData] = useState([]);
+
+  useEffect(() => {
+    try {
+      const savedData = localStorage.getItem("batteryData");
+
+      if (!savedData) {
+        return;
+      }
+
+      const batteryData = JSON.parse(savedData);
+
+      if (!batteryData.rawData) {
+        return;
+      }
+
+      /*
+       * We don't have actual SOH in the CSV.
+       *
+       * So for now we display State of Charge (SOC)
+       * against Cycle Index.
+       *
+       * This is NOT an SOH/degradation calculation.
+       */
+
+      const rawData = batteryData.rawData;
+
+      // Take a smaller number of points so the chart
+      // remains readable.
+      const step = Math.max(
+        1,
+        Math.floor(rawData.length / 20)
+      );
+
+      const chartPoints = rawData
+        .filter((_, index) => index % step === 0)
+        .map((row) => ({
+          cycle: Number(row["Cycle Index"]),
+          soc: Number(row["State of Charge (%)"]),
+        }))
+        .filter(
+          (point) =>
+            !isNaN(point.cycle) &&
+            !isNaN(point.soc)
+        );
+
+      setChartData(chartPoints);
+
+    } catch (error) {
+      console.error(
+        "Error loading degradation chart:",
+        error
+      );
+    }
+  }, []);
+
   return (
     <div className="degradation-chart">
-      <h2>Degradation Analysis</h2>
+
+      <h2>
+        Battery Usage Trend
+      </h2>
 
       <p className="chart-subtitle">
-        Battery health trend over the last 8 months
+        State of charge across battery cycles
       </p>
 
-      <ResponsiveContainer width="100%" height={280}>
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
+      {chartData.length > 0 ? (
 
-          <XAxis dataKey="month" />
+        <ResponsiveContainer
+          width="100%"
+          height={280}
+        >
 
-          <YAxis
-            domain={[80, 100]}
-            tickFormatter={(value) => `${value}%`}
-          />
+          <LineChart data={chartData}>
 
-          <Tooltip
-            formatter={(value) => [`${value}%`, "SOH"]}
-          />
+            <CartesianGrid
+              strokeDasharray="3 3"
+            />
 
-          <Line
-            type="monotone"
-            dataKey="soh"
-            strokeWidth={3}
-            dot={{ r: 4 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+            <XAxis
+              dataKey="cycle"
+              label={{
+                value: "Cycle",
+                position: "insideBottom",
+                offset: -5,
+              }}
+            />
+
+            <YAxis
+              domain={[0, 100]}
+              tickFormatter={(value) =>
+                `${value}%`
+              }
+            />
+
+            <Tooltip
+              formatter={(value) => [
+                `${Number(value).toFixed(2)}%`,
+                "SOC",
+              ]}
+              labelFormatter={(cycle) =>
+                `Cycle ${cycle}`
+              }
+            />
+
+            <Line
+              type="monotone"
+              dataKey="soc"
+              strokeWidth={3}
+              dot={false}
+            />
+
+          </LineChart>
+
+        </ResponsiveContainer>
+
+      ) : (
+
+        <div className="chart-placeholder">
+
+          <p>
+            Upload and analyze a battery CSV
+            to view the battery usage trend.
+          </p>
+
+        </div>
+
+      )}
+
     </div>
-  )
+  );
 }
 
-export default DegradationChart
+export default DegradationChart;
