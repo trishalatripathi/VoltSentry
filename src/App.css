@@ -48,7 +48,7 @@ button {
 
 .logo {
   margin: 0;
-  color: var(--primary-neon);
+  color: #FFFFFF;
   font-size: 24px;
   font-weight: 700;
   text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
@@ -270,6 +270,7 @@ footer {
   grid-area: safety;
   height: fit-content;
   align-self: start;
+  padding: 18px 24px;
 }
 
 .analysis-row .degradation-chart {
@@ -291,11 +292,15 @@ footer {
   margin-bottom: 20px;
 }
 
+.safety-risk h2 {
+  margin-bottom: 12px;
+}
+
 .risk-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 0;
+  padding: 10px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -572,31 +577,344 @@ footer {
   text-transform: uppercase;
 }
 
-/* Analyze Battery Page */
+/* Analyze Battery Page Layout */
+.analyze-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .analyze-page {
   padding: 40px;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
 }
 
-.analyze-header {
-  margin-bottom: 40px;
+/* Navbar Login Button */
+.login-btn {
+  background: transparent;
+  color: var(--text-white);
+  border: 1px solid var(--glass-border);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-.analyze-header h1 {
+.login-btn:hover {
+  color: var(--primary-neon);
+  border-color: var(--primary-neon);
+  background: rgba(0, 255, 136, 0.08);
+}
+
+/* Hero Info Card */
+.hero-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 35px;
+  background: rgba(1, 15, 8, 0.65);
+  border: 1px solid rgba(0, 255, 136, 0.15);
+  border-radius: 16px;
+  padding: 30px 40px;
+}
+
+.hero-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1.3;
+}
+
+.hero-icon-container {
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-neon);
+  flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.08);
+}
+
+.hero-battery-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.hero-text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-title {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.3;
   margin: 0;
-  font-size: 32px;
   color: var(--text-white);
 }
 
-.analyze-header p {
-  margin-top: 10px;
+.hero-subtitle {
+  margin: 0;
+  font-size: 15px;
   color: var(--text-muted);
-  font-size: 16px;
+  line-height: 1.5;
+}
+
+.highlight-green {
+  color: var(--primary-neon);
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+}
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.benefit-dot {
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 255, 136, 0.15);
+  border: 1px solid var(--primary-neon);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-neon);
+  flex-shrink: 0;
+}
+
+.benefit-dot svg {
+  width: 12px;
+  height: 12px;
+}
+
+.benefit-text {
+  font-size: 14px;
+  color: var(--text-white);
+  font-weight: 500;
+}
+
+/* Section Header */
+.section-header {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-white);
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+/* Upload Options 5-Column Grid */
+.upload-options-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 35px;
+}
+
+.upload-option-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(1, 15, 8, 0.65);
+  border: 1px solid rgba(0, 255, 136, 0.12);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 250px;
+}
+
+.upload-option-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 255, 136, 0.35);
+  box-shadow: 0 8px 30px rgba(0, 255, 136, 0.08);
+}
+
+.upload-option-card.active-card {
+  border-color: var(--primary-neon);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);
+  background: rgba(0, 255, 136, 0.04);
+}
+
+.option-icon-wrap {
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 255, 136, 0.08);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-neon);
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.upload-option-card:hover .option-icon-wrap {
+  background: rgba(0, 255, 136, 0.16);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+.option-icon-wrap svg {
+  width: 24px;
+  height: 24px;
+}
+
+.option-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-white);
+  margin: 0 0 8px 0;
+  letter-spacing: 0.5px;
+}
+
+.option-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0 0 20px 0;
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+.option-action {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-neon);
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.upload-option-card:hover .option-action {
+  transform: translateX(4px);
+}
+
+/* Passport Explanation Card */
+.passport-explanation-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  background: rgba(1, 15, 8, 0.65);
+  border: 1px solid rgba(0, 255, 136, 0.15);
+  border-radius: 16px;
+  padding: 30px 40px;
+  margin-bottom: 35px;
+}
+
+.explanation-left {
+  flex: 1.3;
+}
+
+.explanation-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--text-white);
+}
+
+.explanation-desc {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.explanation-right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  position: relative;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+  text-align: center;
+  width: 90px;
+}
+
+.step-num-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-dark);
+  border: 2px solid var(--primary-neon);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-neon);
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+.step-connector {
+  flex-grow: 1;
+  height: 2px;
+  background: rgba(0, 255, 136, 0.2);
+  margin: -24px 8px 0 8px;
+  z-index: 1;
+}
+
+.step-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-white);
+  white-space: nowrap;
+}
+
+/* Form block animation */
+.form-wrapper-block {
+  margin-top: 30px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .battery-form {
-  padding: 40px;
+  padding: 30px 40px;
+  background: rgba(1, 15, 8, 0.7);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .form-group {
@@ -613,7 +931,7 @@ footer {
 
 .form-group input {
   padding: 14px 16px;
-  background: rgba(2, 6, 5, 0.5);
+  background: rgba(2, 6, 5, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   font-size: 15px;
@@ -624,7 +942,7 @@ footer {
 
 .form-group input:focus {
   border-color: var(--primary-neon);
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
 }
 
 .analyze-submit-btn {
@@ -731,7 +1049,7 @@ footer {
   font-weight: 600;
   cursor: pointer;
   padding: 0;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   color: var(--secondary-teal);
   transition: color 0.3s;
 }
@@ -739,6 +1057,77 @@ footer {
 .back-btn:hover {
   color: var(--primary-neon);
   text-shadow: 0 0 5px rgba(0, 255, 136, 0.4);
+}
+
+/* Tablet Media Queries */
+@media (max-width: 1024px) {
+  .upload-options-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .hero-card,
+  .passport-explanation-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 25px;
+  }
+
+  .hero-right,
+  .explanation-right {
+    width: 100%;
+  }
+
+  .step-connector {
+    margin-top: -24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .upload-options-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .explanation-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .step-item {
+    flex-direction: row;
+    text-align: left;
+    width: auto;
+    gap: 12px;
+  }
+
+  .step-connector {
+    display: none;
+  }
+}
+
+/* Mobile Media Queries */
+@media (max-width: 480px) {
+  .analyze-page {
+    padding: 20px 15px;
+  }
+
+  .upload-options-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .hero-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .hero-title {
+    font-size: 22px;
+  }
 }
 
 /* My Batteries Page */
@@ -932,6 +1321,18 @@ footer {
   transition: transform 0.3s;
 }
 
+.passport-decision-values {
+  display: grid;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+.passport-decision-values>div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .metric-card:hover {
   transform: translateY(-4px);
   border-color: rgba(0, 255, 136, 0.2);
@@ -1028,7 +1429,7 @@ footer {
 
 .passport-detail-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
   margin-bottom: 24px;
   align-items: stretch;
@@ -1054,6 +1455,10 @@ footer {
 
   .passport-info {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .passport-detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

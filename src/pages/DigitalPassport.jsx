@@ -427,12 +427,32 @@ function DigitalPassport() {
               {suitability}
             </strong>
           </div>
+
+          <div className="metric-card passport-decision-card">
+            <span className="metric-label">Overall Estimation &amp; Final Decision</span>
+            <div className="passport-decision-values">
+              <div>
+                <span className="metric-label">Overall Estimation</span>
+                <strong className="metric-value good">Potentially Reusable</strong>
+              </div>
+              <div>
+                <span className="metric-label">Final Decision</span>
+                <strong className="metric-value good">REUSE</strong>
+              </div>
+            </div>
+          </div>
         </div>
 
         <p className="passport-note" style={{ marginTop: '25px', padding: '15px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', borderLeft: '4px solid var(--secondary-teal)' }}>
           Second-life suitability is an estimate based on available battery health and history data and should be confirmed through certified testing.
         </p>
 
+      </section>
+
+
+      {/* Suggestions */}
+      <section className="passport-section glass-panel suggestions-section">
+        <h2>Suggestions</h2>
       </section>
 
 
