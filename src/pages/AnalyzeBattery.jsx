@@ -113,7 +113,7 @@ function AnalyzeBattery() {
       const averageTemperature =
         temperatures.length > 0
           ? temperatures.reduce((a, b) => a + b, 0) /
-            temperatures.length
+          temperatures.length
           : 0;
 
       const maximumCurrent =
@@ -129,7 +129,7 @@ function AnalyzeBattery() {
       const averageCellVoltageDelta =
         cellDeltas.length > 0
           ? cellDeltas.reduce((a, b) => a + b, 0) /
-            cellDeltas.length
+          cellDeltas.length
           : 0;
 
       const lifetimeCycles =
@@ -145,7 +145,7 @@ function AnalyzeBattery() {
       const averageSOC =
         socValues.length > 0
           ? socValues.reduce((a, b) => a + b, 0) /
-            socValues.length
+          socValues.length
           : 0;
 
       // --------------------------------
@@ -357,7 +357,7 @@ function AnalyzeBattery() {
       </div>
 
       <form
-        className="battery-form"
+        className="battery-form glass-panel"
         onSubmit={handleSubmit}
       >
 

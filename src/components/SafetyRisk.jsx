@@ -35,7 +35,7 @@ function SafetyRisk() {
   }
 
   return (
-    <div className="safety-risk">
+    <div className="safety-risk glass-panel">
 
       <h2>Safety Risk</h2>
 

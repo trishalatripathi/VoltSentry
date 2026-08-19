@@ -37,18 +37,18 @@ function DegradationFactors() {
     data.lifetimeCycles >= 700
       ? 22
       : data.lifetimeCycles >= 400
-      ? 15
-      : 10;
+        ? 15
+        : 10;
 
   const imbalanceContribution =
     data.maximumCellVoltageDelta >= 50
       ? 14
       : data.maximumCellVoltageDelta >= 30
-      ? 10
-      : 5;
+        ? 10
+        : 5;
 
   return (
-    <div className="degradation-factors">
+    <div className="degradation-factors glass-panel">
 
       {/* Degradation Indicator */}
       <div className="degradation-rate">
@@ -59,7 +59,7 @@ function DegradationFactors() {
 
         <strong>
           {data.maximumTemperature >= 40 ||
-          data.maximumCellVoltageDelta >= 50
+            data.maximumCellVoltageDelta >= 50
             ? "Moderate"
             : "Low"}
         </strong>

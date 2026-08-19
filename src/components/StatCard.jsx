@@ -1,6 +1,6 @@
 function StatCard({ title, value, unit, status }) {
   return (
-    <div className="stat-card">
+    <div className="stat-card glass-panel">
       <p>{title}</p>
 
       <h2>

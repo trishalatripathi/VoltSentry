@@ -68,7 +68,7 @@ function DegradationChart() {
   }, []);
 
   return (
-    <div className="degradation-chart">
+    <div className="degradation-chart glass-panel">
 
       <h2>
         Battery Usage Trend

@@ -8,14 +8,14 @@ function PassportPreview() {
   const batteryData = savedData
     ? JSON.parse(savedData)
     : {
-        vehicleName: "Tata Nexon EV",
-        batteryId: "BX-2026-001",
-        manufacturer: "Example Motors",
-        verificationStatus: "Verified",
-      };
+      vehicleName: "Tata Nexon EV",
+      batteryId: "BX-2026-001",
+      manufacturer: "Example Motors",
+      verificationStatus: "Verified",
+    };
 
   return (
-    <div className="passport-preview">
+    <div className="passport-preview glass-panel">
 
       <div className="passport-header">
 
@@ -28,11 +28,14 @@ function PassportPreview() {
         </div>
 
         <button
-          className="passport-arrow"
+          className="icon-btn"
           onClick={() => navigate("/passport")}
           aria-label="Open Second-Life Passport"
         >
-          →
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
         </button>
 
       </div>
@@ -69,9 +72,11 @@ function PassportPreview() {
 
         <div>
           <span>Verification</span>
-
-          <strong className="verified">
-            ✓ {batteryData.verificationStatus}
+          <strong className="badge-success">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            {batteryData.verificationStatus}
           </strong>
         </div>
 

@@ -6,6 +6,9 @@ import SafetyRisk from "./components/SafetyRisk";
 import DegradationChart from "./components/DegradationChart";
 import PassportPreview from "./components/PassportPreview";
 import DegradationFactors from "./components/DegradationFactors";
+import ThermalAnalysis from "./components/ThermalAnalysis";
+
+import logoImg from "./assets/voltsentry-logo.png";
 
 import {
   BrowserRouter,
@@ -97,87 +100,76 @@ function Dashboard() {
   // Overall safety risk
   const overallRisk =
     data.thermalRisk === "High" ||
-    data.electricalRisk === "High" ||
-    data.chargingRisk === "High" ||
-    data.cellImbalanceRisk === "High"
+      data.electricalRisk === "High" ||
+      data.chargingRisk === "High" ||
+      data.cellImbalanceRisk === "High"
       ? "High"
       : data.thermalRisk === "Medium" ||
         data.electricalRisk === "Medium" ||
         data.chargingRisk === "Medium" ||
         data.cellImbalanceRisk === "Medium"
-      ? "Medium"
-      : "Low";
+        ? "Medium"
+        : "Low";
 
 
   const riskStatus =
     overallRisk === "Low"
       ? "Safe"
       : overallRisk === "Medium"
-      ? "Monitor"
-      : "Attention";
+        ? "Monitor"
+        : "Attention";
 
 
   return (
     <div className="app">
 
-      {/* Sidebar */}
-      <aside className="sidebar">
-
-        <h2 className="logo">
-          ⚡ VoltSentry
+      {/* Navbar */}
+      <nav className="top-navbar">
+        <h2 className="logo" onClick={() => navigate("/")} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src={logoImg} alt="VoltSentry Lightning" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
+          VoltSentry
         </h2>
 
-        <nav>
-
+        <div className="nav-links">
           <button
-            className={`nav-item ${
-              location.pathname === "/" ? "active" : ""
-            }`}
+            className={`nav-item ${location.pathname === "/" ? "active" : ""
+              }`}
             onClick={() => navigate("/")}
           >
             Dashboard
           </button>
 
-
           <button
-            className={`nav-item ${
-              location.pathname === "/batteries"
-                ? "active"
-                : ""
-            }`}
-            onClick={() => navigate("/batteries")}
-          >
-            My Batteries
-          </button>
-
-
-          <button
-            className={`nav-item ${
-              location.pathname === "/analyze"
-                ? "active"
-                : ""
-            }`}
+            className={`nav-item ${location.pathname === "/analyze"
+              ? "active"
+              : ""
+              }`}
             onClick={() => navigate("/analyze")}
           >
-            Analysis
+            Analyze Battery
           </button>
-
 
           <button
-            className={`nav-item ${
-              location.pathname === "/passport"
-                ? "active"
-                : ""
-            }`}
-            onClick={() => navigate("/passport")}
+            className={`nav-item ${location.pathname === "/batteries"
+              ? "active"
+              : ""
+              }`}
+            onClick={() => navigate("/batteries")}
           >
-            Digital Passport
+            History
           </button>
 
-        </nav>
-
-      </aside>
-
+          <button
+            className={`nav-item ${location.pathname === "/passport"
+              ? "active"
+              : ""
+              }`}
+            onClick={() => navigate("/passport")}
+          >
+            Battery Passport
+          </button>
+        </div>
+      </nav>
 
       {/* Main Content */}
       <main className="main-content">
@@ -248,24 +240,18 @@ function Dashboard() {
         {/* Battery Overview */}
         <section className="overview">
 
-
-          <div className="panel">
-
+          <div className="panel glass-panel">
             <h2>
               Battery Overview
             </h2>
 
-
             <div className="battery-circle">
-
               <span>
                 {data.currentSOH}%
               </span>
-
               <small>
                 Health
               </small>
-
             </div>
 
 
@@ -285,8 +271,7 @@ function Dashboard() {
 
 
           {/* Quick Actions */}
-          <div className="panel">
-
+          <div className="panel glass-panel">
             <h2>
               Quick Actions
             </h2>
@@ -336,6 +321,8 @@ function Dashboard() {
 
         </div>
 
+        {/* Thermal Analysis */}
+        <ThermalAnalysis />
 
         {/* Second-Life Passport */}
         <PassportPreview />

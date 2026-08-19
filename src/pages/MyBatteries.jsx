@@ -24,14 +24,14 @@ function MyBatteries() {
 
           risk:
             data.thermalRisk === "High" ||
-            data.electricalRisk === "High" ||
-            data.chargingRisk === "High"
+              data.electricalRisk === "High" ||
+              data.chargingRisk === "High"
               ? "High"
               : data.thermalRisk === "Medium" ||
                 data.electricalRisk === "Medium" ||
                 data.chargingRisk === "Medium"
-              ? "Medium"
-              : "Low",
+                ? "Medium"
+                : "Low",
 
           cycles:
             data.lifetimeCycles ?? "N/A",
@@ -45,8 +45,8 @@ function MyBatteries() {
             data.currentSOH >= 80
               ? "Good"
               : data.currentSOH >= 60
-              ? "Monitor"
-              : "Needs Attention",
+                ? "Monitor"
+                : "Needs Attention",
         };
 
         setBatteries([battery]);
@@ -86,7 +86,7 @@ function MyBatteries() {
 
       {/* No batteries */}
       {batteries.length === 0 && (
-        <div className="no-batteries">
+        <div className="no-batteries glass-panel" style={{ textAlign: 'center', marginBottom: '24px' }}>
 
           <h2>
             No batteries analyzed yet
@@ -114,110 +114,65 @@ function MyBatteries() {
         {batteries.map((battery) => (
 
           <div
-            className="battery-card"
+            className="battery-card glass-panel"
             key={battery.id}
           >
 
             {/* Card Header */}
             <div className="battery-card-header">
-
               <div>
-                <h2>
-                  {battery.vehicle}
-                </h2>
-
-                <span>
-                  {battery.id}
-                </span>
+                <h2>{battery.vehicle}</h2>
+                <span>{battery.id}</span>
               </div>
-
-              <span
-                className={
-                  battery.risk === "Low"
-                    ? "risk-badge low"
-                    : battery.risk === "Medium"
-                    ? "risk-badge medium"
-                    : "risk-badge high"
-                }
-              >
-                {battery.risk} Risk
+              <span className={
+                battery.risk === "Low" ? "badge-success" :
+                  battery.risk === "Medium" ? "badge-warning" : "badge-danger"
+              }>
+                {battery.risk}
               </span>
-
             </div>
-
 
             {/* Battery Details */}
-            <div className="battery-details">
+            <div className="summary-card-inner">
 
-              <div>
-                <span>
-                  Battery Health
-                </span>
-
-                <strong>
-                  {battery.health !== "N/A"
-                    ? `${battery.health}%`
-                    : "N/A"}
-                </strong>
+              <div className="battery-ring-container">
+                <h3>{battery.health !== "N/A" ? `${battery.health}%` : "N/A"}</h3>
+                <span>Health</span>
               </div>
 
-
-              <div>
-                <span>
-                  Charging Cycles
-                </span>
-
-                <strong>
-                  {battery.cycles}
-                </strong>
-              </div>
-
-
-              <div>
-                <span>
-                  Capacity
-                </span>
-
-                <strong>
-                  {battery.capacity}
-                </strong>
-              </div>
-
-
-              <div>
-                <span>
-                  Status
-                </span>
-
-                <strong>
-                  {battery.status}
-                </strong>
+              <div className="summary-stats-grid">
+                <div>
+                  <span className="metric-label">Charging Cycles</span>
+                  <strong className="metric-value">{battery.cycles}</strong>
+                </div>
+                <div>
+                  <span className="metric-label">Capacity</span>
+                  <strong className="metric-value">{battery.capacity}</strong>
+                </div>
+                <div>
+                  <span className="metric-label">Status</span>
+                  <strong className={`metric-value ${battery.status === 'Good' ? 'good' : ''}`}>
+                    {battery.status}
+                  </strong>
+                </div>
               </div>
 
             </div>
 
-
             {/* Actions */}
-            <div className="battery-card-actions">
-
+            <div className="summary-actions-row">
               <button
-                className="secondary-btn"
-                onClick={() =>
-                  navigate("/passport")
-                }
+                className="btn-outline-neon"
+                onClick={() => navigate("/passport")}
               >
                 View Passport
               </button>
-
               <button
-                className="secondary-btn"
-                onClick={() =>
-                  navigate("/analyze")
-                }
+                className="btn-solid-neon"
+                onClick={() => navigate("/analyze")}
               >
                 Analyze
               </button>
-
             </div>
 
           </div>

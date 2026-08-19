@@ -121,7 +121,7 @@ function DigitalPassport() {
 
 
       {/* Vehicle Information */}
-      <section className="passport-section">
+      <section className="passport-section glass-panel">
 
         <h2>Vehicle Information</h2>
 
@@ -143,7 +143,7 @@ function DigitalPassport() {
 
 
       {/* Battery Information */}
-      <section className="passport-section">
+      <section className="passport-section glass-panel">
 
         <h2>Battery Information</h2>
 
@@ -179,7 +179,7 @@ function DigitalPassport() {
 
 
       {/* Battery History */}
-      <section className="passport-section">
+      <section className="passport-section glass-panel">
 
         <h2>Battery History</h2>
 
@@ -366,7 +366,7 @@ function DigitalPassport() {
 
 
       {/* Verification */}
-      <section className="passport-section">
+      <section className="passport-section glass-panel">
 
         <h2>Verification Status</h2>
 
@@ -399,54 +399,38 @@ function DigitalPassport() {
 
 
       {/* Second Life */}
-      <section className="passport-section">
+      <section className="passport-section glass-panel">
 
         <h2>Second-Life Information</h2>
 
-        <div className="second-life-card">
-
-          <div>
-
-            <span>Current SOH</span>
-
-            <strong>
-              {currentSOH !== null
-                ? `${currentSOH}%`
-                : "Not available"}
+        <div className="passport-detail-grid">
+          <div className="metric-card">
+            <span className="metric-label">Current SOH</span>
+            <strong className="metric-value">
+              {currentSOH !== null ? `${currentSOH}%` : "Not available"}
             </strong>
-
           </div>
 
-
-          <div>
-
-            <span>Battery Condition</span>
-
-            <strong>
+          <div className="metric-card">
+            <span className="metric-label">Battery Condition</span>
+            <strong className={`metric-value ${batteryCondition === 'Good' ? 'good' : ''}`}>
               {batteryCondition}
             </strong>
-
           </div>
 
-
-          <div>
-
-            <span>Estimated Suitability</span>
-
-            <strong>
+          <div className="metric-card">
+            <span className="metric-label">Estimated Suitability</span>
+            <strong className="metric-value good">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'bottom', marginRight: '6px' }}>
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
               {suitability}
             </strong>
-
           </div>
-
         </div>
 
-        <p className="passport-note">
-
-          Second-life suitability is an estimate based on
-          available battery health and history data and
-          should be confirmed through certified testing.
-
+        <p className="passport-note" style={{ marginTop: '25px', padding: '15px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', borderLeft: '4px solid var(--secondary-teal)' }}>
+          Second-life suitability is an estimate based on available battery health and history data and should be confirmed through certified testing.
         </p>
 
       </section>
