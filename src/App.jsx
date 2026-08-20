@@ -132,6 +132,15 @@ function Dashboard() {
 
         <div className="nav-links">
           <button
+            className="nav-item"
+            onClick={() => {
+              window.location.href = "http://127.0.0.1:5500/app2/index.html";
+            }}
+          >
+            Home
+          </button>
+
+          <button
             className={`nav-item ${location.pathname === "/" ? "active" : ""
               }`}
             onClick={() => navigate("/")}
