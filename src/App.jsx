@@ -134,7 +134,7 @@ function Dashboard() {
           <button
             className="nav-item"
             onClick={() => {
-              window.location.href = "http://127.0.0.1:5500/app2/index.html";
+              navigate("/");
             }}
           >
             Home
@@ -143,7 +143,7 @@ function Dashboard() {
           <button
             className={`nav-item ${location.pathname === "/" ? "active" : ""
               }`}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/dashboard")}
           >
             Dashboard
           </button>
@@ -363,9 +363,21 @@ function App() {
 
       <Routes>
 
-        {/* Dashboard */}
+        {/* Main website */}
         <Route
           path="/"
+          element={
+            <iframe
+              src="/main-website/index.html"
+              title="VoltSentry main website"
+              style={{ width: "100%", height: "100vh", border: "0", display: "block" }}
+            />
+          }
+        />
+
+        {/* Dashboard */}
+        <Route
+          path="/dashboard"
           element={<Dashboard />}
         />
 

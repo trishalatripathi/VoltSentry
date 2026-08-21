@@ -342,21 +342,21 @@ function AnalyzeBattery() {
     );
 
     // Go to dashboard
-    navigate("/");
+    navigate("/dashboard");
   }
 
   return (
     <div className="analyze-container">
       {/* Navbar */}
       <nav className="top-navbar">
-        <h2 className="logo" onClick={() => navigate("/")} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', color: '#FFFFFF' }}>
+        <h2 className="logo" onClick={() => navigate("/dashboard")} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', color: '#FFFFFF' }}>
           <img src={logoImg} alt="VoltSentry Lightning" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
           VoltSentry
         </h2>
 
         <div className="nav-links">
           <button className="nav-item" onClick={() => navigate("/")}>Home</button>
-          <button className="nav-item active" onClick={() => navigate("/")}>Dashboard</button>
+          <button className="nav-item active" onClick={() => navigate("/dashboard")}>Dashboard</button>
           <button className="nav-item" onClick={() => navigate("/passport")}>Battery Passport</button>
         </div>
       </nav>
@@ -365,7 +365,7 @@ function AnalyzeBattery() {
         {/* Back Button */}
         <button
           className="back-btn"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/dashboard")}
         >
           &larr; Back to Dashboard
         </button>

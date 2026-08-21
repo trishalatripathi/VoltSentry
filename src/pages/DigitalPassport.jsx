@@ -96,7 +96,7 @@ function DigitalPassport() {
       {/* Back */}
       <button
         className="back-btn"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/dashboard")}
       >
         ← Back to Dashboard
       </button>

@@ -1,0 +1,974 @@
+/* 
+ * VoltSentry Login Page Style Sheet (login.css)
+ * Features:
+ * • Responsive 2-Column Showroom Layout
+ * • Layered 3D Perspective Vehicle Stage with Headlight Flares & Floating Shards
+ * • Full Dark Mode & Light Mode Theme Support with Functional Toggle
+ * • Multi-Color Brand Icons (Apple, Google, Microsoft)
+ * • Electrical Particle Canvas & Energy Sweep Transition
+ */
+
+:root {
+  /* DARK THEME TOKENS (Default) */
+  --bg-deep-black: #060906;
+  --bg-dark-section: #080d09;
+  --bg-card-glass: rgba(12, 22, 14, 0.72);
+  --bg-card-hover: rgba(20, 36, 23, 0.88);
+  --bg-input: rgba(6, 12, 7, 0.7);
+  --bg-input-focus: rgba(10, 20, 12, 0.9);
+  
+  --color-green-primary: #4ade80;
+  --color-green-vibrant: #22c55e;
+  --color-lime-accent: #a3e635;
+  
+  --border-emerald: rgba(74, 222, 128, 0.25);
+  --border-emerald-light: rgba(74, 222, 128, 0.12);
+  --border-card: rgba(74, 222, 128, 0.15);
+  
+  --text-white: #ffffff;
+  --text-light: #f3f4f6;
+  --text-dim: #d1d5db;
+  --text-muted: #9ca3af;
+  --text-dark: #6b7280;
+  
+  --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* LIGHT THEME OVERRIDES */
+body.login-body.light-theme {
+  --bg-deep-black: #f0fdf4;
+  --bg-dark-section: #e2f5e9;
+  --bg-card-glass: rgba(255, 255, 255, 0.82);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
+  --bg-input: rgba(240, 253, 244, 0.9);
+  --bg-input-focus: #ffffff;
+  
+  --color-green-primary: #16a34a;
+  --color-green-vibrant: #15803d;
+  --color-lime-accent: #65a30d;
+  
+  --border-emerald: rgba(22, 163, 74, 0.3);
+  --border-emerald-light: rgba(22, 163, 74, 0.18);
+  --border-card: rgba(22, 163, 74, 0.2);
+  
+  --text-white: #0f172a;
+  --text-light: #1e293b;
+  --text-dim: #334155;
+  --text-muted: #64748b;
+  --text-dark: #94a3b8;
+  
+  --card-shadow: 0 20px 50px rgba(22, 163, 74, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Global Reset & Base Styling */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body.login-body {
+  background-color: var(--bg-deep-black);
+  color: var(--text-light);
+  font-family: var(--font-family);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Aurora & Background Lights */
+.aurora-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('login-bg.jpg');
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  opacity: 0.85;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+body.login-body.light-theme .aurora-bg {
+  opacity: 0.45;
+  filter: brightness(1.2) contrast(0.9);
+}
+
+.aurora-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 60% 50%, transparent 10%, rgba(6, 9, 6, 0.35) 60%, rgba(6, 9, 6, 0.95) 100%);
+  z-index: 1;
+  pointer-events: none;
+  transition: background 0.4s ease;
+}
+
+body.login-body.light-theme .aurora-overlay {
+  background: radial-gradient(circle at 60% 50%, transparent 20%, rgba(240, 253, 244, 0.5) 60%, rgba(240, 253, 244, 0.95) 100%);
+}
+
+/* Full Page Wrapper */
+.login-wrapper {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* LEFT COLUMN: DISPLAY PANEL */
+.display-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 64px;
+  position: relative;
+  overflow: hidden;
+  border-right: 1px solid rgba(74, 222, 128, 0.05);
+}
+
+body.login-body.light-theme .display-panel {
+  border-right-color: rgba(22, 163, 74, 0.1);
+}
+
+.brand-header {
+  z-index: 10;
+}
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-white);
+}
+
+.logo-bolt {
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.6));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.brand-logo:hover .logo-bolt {
+  transform: scale(1.1);
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.display-content {
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 640px;
+}
+
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  background: rgba(22, 163, 74, 0.12);
+  border: 1px solid var(--border-emerald);
+  border-radius: 9999px;
+  padding: 6px 16px;
+  color: var(--color-green-primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.badge-shield {
+  width: 14px;
+  height: 14px;
+}
+
+.display-headline {
+  font-size: clamp(2.4rem, 3.8vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--text-white);
+}
+
+.gradient-green {
+  background: linear-gradient(135deg, var(--color-green-primary) 0%, var(--color-lime-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.display-subtext {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+/* ========================================================
+   TRUE 3D WEBGL VEHICLE CANVAS STAGE
+   ======================================================== */
+.canvas-container {
+  width: 100%;
+  height: 330px;
+  position: relative;
+  cursor: grab;
+  user-select: none;
+  border-radius: 16px;
+  overflow: visible;
+  background: radial-gradient(circle at 50% 50%, rgba(74, 222, 128, 0.05) 0%, transparent 70%);
+}
+
+.canvas-container:active {
+  cursor: grabbing;
+}
+
+#vehicleCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 16px;
+}
+
+/* Glow Underlay behind the vehicle */
+.car-glow-underlay {
+  position: absolute;
+  inset: -10%;
+  background: radial-gradient(ellipse at 50% 65%, rgba(74, 222, 128, 0.25) 0%, rgba(34, 197, 94, 0.1) 45%, transparent 70%);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Headlight Interactive Flares */
+.headlight-flare {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(163, 230, 53, 0.9) 0%, rgba(74, 222, 128, 0.6) 40%, transparent 70%);
+  filter: blur(4px);
+  pointer-events: none;
+  opacity: 0.3;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.headlight-flare-left {
+  left: 20%;
+  top: 50%;
+}
+
+.headlight-flare-right {
+  left: 28%;
+  top: 45%;
+}
+
+/* Vehicle Hover State Enhancements */
+.canvas-container:hover .car-glow-underlay {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.canvas-container:hover .headlight-flare {
+  opacity: 0.95;
+  transform: scale(1.3);
+}
+
+.canvas-container:hover .car-interactive-img {
+  filter: drop-shadow(0 20px 40px rgba(74, 222, 128, 0.35)) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+}
+
+/* Floor Shadow */
+.car-floor-shadow {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 28px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Holographic Energy Wireframe Layer */
+.car-wireframe-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(74, 222, 128, 0.3) 0%, transparent 80%);
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transition: opacity 0.5s ease;
+}
+
+/* Particle Canvas */
+.interactive-particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Explore Micro-interaction Floating Label */
+.explore-label {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-emerald);
+  color: var(--color-green-primary);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  opacity: 0.9;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  animation: floatLabel 3s ease-in-out infinite;
+  z-index: 10;
+}
+
+.explore-label.fade-out {
+  opacity: 0 !important;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+@keyframes floatLabel {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -6px); }
+}
+
+/* Ripple Ring */
+.ripple-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 6;
+}
+
+.ripple-ring {
+  position: absolute;
+  border: 2px solid var(--color-green-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0.8;
+  box-shadow: 0 0 20px var(--color-green-primary);
+}
+
+/* 3 Features Chips Grid */
+.feature-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.feature-chip {
+  background: var(--bg-card-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-emerald-light);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  transition: var(--transition-smooth);
+}
+
+.feature-chip:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-emerald);
+  transform: translateY(-2px);
+}
+
+.chip-icon-box {
+  background: rgba(74, 222, 128, 0.12);
+  border-radius: 8px;
+  padding: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-green-primary);
+  flex-shrink: 0;
+}
+
+.chip-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.chip-details strong {
+  color: var(--text-white);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.chip-details span {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+/* Quote Section */
+.quote-block {
+  margin-top: 4px;
+  padding-left: 16px;
+  border-left: 2px solid var(--color-green-primary);
+  position: relative;
+}
+
+.quote-mark {
+  position: absolute;
+  left: 6px;
+  top: -12px;
+  font-size: 2.2rem;
+  font-family: serif;
+  color: rgba(74, 222, 128, 0.2);
+  line-height: 1;
+}
+
+.quote-text {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.text-green {
+  color: var(--color-green-primary);
+  font-weight: 600;
+}
+
+/* Left Footer */
+.display-footer {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-emerald-light);
+  padding-top: 20px;
+  font-size: 0.75rem;
+  color: var(--text-dark);
+}
+
+/* ========================================================
+   RIGHT COLUMN: FORM PANEL & THEME TOGGLE
+   ======================================================== */
+.form-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 48px 48px;
+  position: relative;
+}
+
+.top-nav-right {
+  align-self: flex-end;
+  z-index: 10;
+}
+
+/* Functional Theme Toggle Switch */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-emerald-light);
+  border-radius: 9999px;
+  padding: 6px 10px;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--border-emerald);
+  transform: scale(1.03);
+}
+
+.sun-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+body.login-body.light-theme .sun-icon {
+  color: #eab308;
+}
+
+.toggle-track {
+  width: 44px;
+  height: 24px;
+  background: rgba(6, 12, 7, 0.7);
+  border: 1px solid var(--border-emerald-light);
+  border-radius: 9999px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+body.login-body.light-theme .toggle-track {
+  background: rgba(22, 163, 74, 0.2);
+}
+
+.toggle-thumb {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(74, 222, 128, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+}
+
+body.login-body.light-theme .toggle-thumb {
+  transform: translateX(20px);
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.moon-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--color-green-primary);
+}
+
+/* ========================================================
+   LOGIN CARD & FORM INPUTS
+   ======================================================== */
+.login-card-container {
+  width: 100%;
+  max-width: 440px;
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.login-card {
+  width: 100%;
+  background: var(--bg-card-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-card);
+  border-radius: 24px;
+  padding: 40px 36px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.4s ease, 
+              background 0.4s ease,
+              border-color 0.3s ease;
+}
+
+.card-header {
+  margin-bottom: 28px;
+}
+
+.welcome-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-green-primary);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.card-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-white);
+  letter-spacing: -0.025em;
+  margin-bottom: 6px;
+}
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Form inputs */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-group {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.input-group input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-emerald-light);
+  border-radius: 12px;
+  padding: 14px 16px 14px 48px;
+  color: var(--text-white);
+  font-family: var(--font-family);
+  font-size: 0.92rem;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.input-group input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.input-group input:focus {
+  border-color: var(--color-green-primary);
+  background: var(--bg-input-focus);
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.15);
+}
+
+.input-group input:focus + .input-icon {
+  color: var(--color-green-primary);
+}
+
+/* Password eye toggle */
+.eye-toggle {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.eye-toggle:hover {
+  color: var(--text-white);
+}
+
+/* Form Extras */
+.form-extras {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-dim);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  height: 16px;
+  width: 16px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-emerald);
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  border-color: var(--color-green-primary);
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: var(--color-green-vibrant);
+  border-color: var(--color-green-vibrant);
+}
+
+.checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-container input:checked ~ .checkmark::after {
+  display: block;
+}
+
+.forgot-link {
+  color: var(--color-green-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.forgot-link:hover {
+  color: var(--color-lime-accent);
+  text-decoration: underline;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--color-green-primary) 0%, var(--color-green-vibrant) 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  color: #040905;
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.25);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(74, 222, 128, 0.35);
+  filter: brightness(1.05);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.btn-arrow {
+  transition: transform 0.25s ease;
+}
+
+.submit-btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* Form Divider */
+.form-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-dark);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 22px 0;
+}
+
+.form-divider::before,
+.form-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-emerald-light);
+}
+
+.form-divider::before {
+  margin-right: 12px;
+}
+
+.form-divider::after {
+  margin-left: 12px;
+}
+
+/* Social Buttons Grid */
+.social-login-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.social-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-emerald-light);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-white);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.social-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-emerald);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.social-btn svg {
+  display: block;
+}
+
+/* Card footer */
+.card-footer {
+  text-align: center;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.create-link {
+  color: var(--color-green-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.create-link:hover {
+  color: var(--color-lime-accent);
+  text-decoration: underline;
+}
+
+/* Full-Screen Energy Sweep Overlay */
+.sweep-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(74, 222, 128, 0.2) 40%, 
+                rgba(163, 230, 53, 0.8) 50%, 
+                rgba(74, 222, 128, 0.2) 60%, 
+                transparent 100%);
+  transform: translateX(-100%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* Verifying logo pulse */
+@keyframes batteryLogoPulse {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.6)); }
+  50% { filter: drop-shadow(0 0 25px rgba(74, 222, 128, 0.95)); }
+}
+
+.logo-bolt.verifying {
+  animation: batteryLogoPulse 0.9s ease-in-out infinite;
+  fill: var(--color-lime-accent);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .login-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+  .display-panel, .form-panel {
+    padding: 36px;
+  }
+}
+
+@media (max-width: 820px) {
+  .login-wrapper {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow-y: auto;
+  }
+  
+  .display-panel {
+    height: auto;
+    min-height: 100vh;
+    padding: 36px 24px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-emerald-light);
+  }
+
+  .form-panel {
+    height: auto;
+    min-height: 100vh;
+    padding: 48px 24px;
+  }
+
+  .canvas-container {
+    height: 260px;
+  }
+
+  .feature-chips-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .display-footer {
+    margin-top: 40px;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .display-panel, .form-panel {
+    padding: 24px 16px;
+  }
+  
+  .display-headline {
+    font-size: 2rem;
+  }
+  
+  .login-card {
+    padding: 28px 20px;
+  }
+}
