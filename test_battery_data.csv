@@ -1,0 +1,4 @@
+Battery Temperature (C),Pack Current (A),Cell Voltage Delta (mV),Cycle Index,State of Charge (%)
+35,60,25,740,68.5
+36,65,26,741,68.2
+37,70,27,742,68.0
