@@ -120,4 +120,4 @@ This project currently does not specify a license.
 
 ## Author
 
-Trisha Tripathi
+Trishala Tripathi
