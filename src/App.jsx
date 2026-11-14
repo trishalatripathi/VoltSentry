@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import StatCard from "./components/StatCard";
 import SafetyRisk from "./components/SafetyRisk";
@@ -27,79 +27,79 @@ function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [batteryData, setBatteryData] = useState(null);
-
-
-  // Load saved battery data
-  useEffect(() => {
+  const [batteryData] = useState(() => {
     try {
       const savedData = localStorage.getItem("batteryData");
-
       if (savedData) {
         const parsedData = JSON.parse(savedData);
-
         if (parsedData && !Array.isArray(parsedData)) {
-          setBatteryData(parsedData);
+          return parsedData;
         }
       }
     } catch (error) {
       console.error("Error loading battery data:", error);
-
       localStorage.removeItem("batteryData");
-      setBatteryData(null);
     }
-  }, []);
+    return null;
+  });
 
+  const currentSOH =
+    batteryData?.sohMethod === "measured-capacity/rated-capacity" &&
+    Number.isFinite(batteryData.currentSOH) &&
+    batteryData.currentSOH > 0 &&
+    batteryData.currentSOH <= 100
+      ? batteryData.currentSOH
+      : null;
 
-  // Safe default values
   const data = {
     vehicleName:
-      batteryData?.vehicleName || "Tata Nexon EV",
+      batteryData?.vehicleName || "Uploaded battery",
 
     batteryId:
-      batteryData?.batteryId || "BX-2026-001",
+      batteryData?.batteryId || "Not available",
 
-    currentSOH:
-      batteryData?.currentSOH ?? 87,
+    currentSOH,
 
     averageTemperature:
-      batteryData?.averageTemperature ?? 32,
+      batteryData?.averageTemperature ?? null,
 
     maximumTemperature:
-      batteryData?.maximumTemperature ?? 41,
+      batteryData?.maximumTemperature ?? null,
 
     lifetimeCycles:
-      batteryData?.lifetimeCycles ?? 742,
-
-    averageCellVoltageDelta:
-      batteryData?.averageCellVoltageDelta ?? 26.4,
-
-    maximumCellVoltageDelta:
-      batteryData?.maximumCellVoltageDelta ?? 51.2,
+      batteryData?.lifetimeCycles ?? null,
 
     averageSOC:
-      batteryData?.averageSOC ?? 68.2,
+      batteryData?.averageSOC ?? null,
 
     verificationStatus:
-      batteryData?.verificationStatus || "Verified",
+      batteryData?.verificationStatus || "Not analyzed",
 
     thermalRisk:
-      batteryData?.thermalRisk || "Low",
+      batteryData?.thermalRisk || null,
 
     electricalRisk:
-      batteryData?.electricalRisk || "Low",
+      batteryData?.electricalRisk || null,
 
     chargingRisk:
-      batteryData?.chargingRisk || "Low",
+      batteryData?.chargingRisk || null,
 
     cellImbalanceRisk:
-      batteryData?.cellImbalanceRisk || "Low",
+      batteryData?.cellImbalanceRisk || null,
   };
 
 
   // Overall safety risk
+  const recordedRisks = [
+    data.thermalRisk,
+    data.electricalRisk,
+    data.chargingRisk,
+    data.cellImbalanceRisk,
+  ].filter(Boolean);
   const overallRisk =
-    data.thermalRisk === "High" ||
+    recordedRisks.length === 0
+      ? "Unavailable"
+      : data.thermalRisk === "High" ||
       data.electricalRisk === "High" ||
       data.chargingRisk === "High" ||
       data.cellImbalanceRisk === "High"
@@ -113,7 +113,9 @@ function Dashboard() {
 
 
   const riskStatus =
-    overallRisk === "Low"
+    overallRisk === "Unavailable"
+      ? "No validated data"
+      : overallRisk === "Low"
       ? "Safe"
       : overallRisk === "Medium"
         ? "Monitor"
@@ -211,36 +213,52 @@ function Dashboard() {
 
         </header>
 
+        {batteryData?.dataProvenance === "Synthetic demonstration data" && (
+          <p className="synthetic-data-notice">
+            Dashboard metrics and charts are derived from synthetic demonstration
+            data, not real EV measurements.
+          </p>
+        )}
 
         {/* Statistics */}
         <section className="stats">
 
           <StatCard
             title="Battery Health"
-            value={data.currentSOH}
-            unit="%"
-            status="Good"
+            value={data.currentSOH === null
+              ? "Unavailable"
+              : `${data.currentSOH.toFixed(1)}%`}
+            unit=""
+            status={data.currentSOH === null ? "Capacity data required" : "Measured"}
+            statusClass={data.currentSOH === null ? "status" : "status good"}
           />
 
 
           <StatCard
             title="Safety Risk"
             value={overallRisk}
-            status={riskStatus}
+            status={overallRisk === "Unavailable" ? null : riskStatus}
+            statusClass={
+              overallRisk === "High"
+                ? "status risk-high"
+                : overallRisk === "Medium"
+                  ? "status risk-medium"
+                  : "status good"
+            }
           />
 
 
           <StatCard
             title="Charging Cycles"
-            value={data.lifetimeCycles}
-            unit="Cycles"
+            value={data.lifetimeCycles ?? "Unavailable"}
+            unit={data.lifetimeCycles === null ? "" : "Cycles"}
           />
 
 
           <StatCard
             title="Average SOC"
-            value={data.averageSOC}
-            unit="%"
+            value={data.averageSOC ?? "Unavailable"}
+            unit={data.averageSOC === null ? "" : "%"}
           />
 
         </section>
@@ -256,22 +274,26 @@ function Dashboard() {
 
             <div className="battery-circle">
               <span>
-                {data.currentSOH}%
+                {data.currentSOH === null
+                  ? "Unavailable"
+                  : `${data.currentSOH.toFixed(1)}%`}
               </span>
               <small>
-                Health
+                State of Health
               </small>
             </div>
 
 
             <p>
 
-              Battery health is currently{" "}
+              State of health{" "}
 
               <strong>
-                {data.currentSOH >= 80
-                  ? "Good"
-                  : "Needs Attention"}
+                {data.currentSOH === null
+                  ? "unavailable — measured capacity data required"
+                  : data.currentSOH >= 80
+                    ? "Good"
+                    : "Needs Attention"}
               </strong>.
 
             </p>

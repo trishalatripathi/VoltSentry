@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   LineChart,
@@ -10,62 +10,41 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+function loadChartData() {
+  try {
+    const savedData = localStorage.getItem("batteryData");
+    const batteryData = savedData ? JSON.parse(savedData) : null;
+    const rawData = Array.isArray(batteryData?.rawData)
+      ? batteryData.rawData
+      : [];
+    const step = Math.max(1, Math.floor(rawData.length / 20));
+
+    return rawData
+      .filter((_, index) => index % step === 0)
+      .map((row) => {
+        const cycleValue = row["Cycle Index"];
+        const socValue = row["State of Charge (%)"];
+        return {
+          cycle: cycleValue === "" || cycleValue == null
+            ? null
+            : Number(cycleValue),
+          soc: socValue === "" || socValue == null
+            ? null
+            : Number(socValue),
+        };
+      })
+      .filter((point) =>
+        Number.isFinite(point.cycle) &&
+        Number.isFinite(point.soc),
+      );
+  } catch (error) {
+    console.error("Error loading battery usage chart:", error);
+    return [];
+  }
+}
+
 function DegradationChart() {
-  const [chartData, setChartData] = useState([]);
-
-  useEffect(() => {
-    try {
-      const savedData = localStorage.getItem("batteryData");
-
-      if (!savedData) {
-        return;
-      }
-
-      const batteryData = JSON.parse(savedData);
-
-      if (!batteryData.rawData) {
-        return;
-      }
-
-      /*
-       * We don't have actual SOH in the CSV.
-       *
-       * So for now we display State of Charge (SOC)
-       * against Cycle Index.
-       *
-       * This is NOT an SOH/degradation calculation.
-       */
-
-      const rawData = batteryData.rawData;
-
-      // Take a smaller number of points so the chart
-      // remains readable.
-      const step = Math.max(
-        1,
-        Math.floor(rawData.length / 20)
-      );
-
-      const chartPoints = rawData
-        .filter((_, index) => index % step === 0)
-        .map((row) => ({
-          cycle: Number(row["Cycle Index"]),
-          soc: Number(row["State of Charge (%)"]),
-        }))
-        .filter(
-          (point) =>
-            !isNaN(point.cycle) &&
-            !isNaN(point.soc)
-        );
-
-      setChartData(chartPoints);
-
-    } catch (error) {
-      console.error(
-        "Error loading degradation chart:",
-        error
-      );
-    }
-  }, []);
+  const [chartData] = useState(loadChartData);
 
   return (
     <div className="degradation-chart glass-panel">
@@ -133,8 +112,8 @@ function DegradationChart() {
         <div className="chart-placeholder">
 
           <p>
-            Upload and analyze a battery CSV
-            to view the battery usage trend.
+            No valid cycle and SOC history is available. Upload battery data
+            to view the usage trend.
           </p>
 
         </div>

@@ -1,28 +1,25 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+function loadBatteryData() {
+  try {
+    const savedData = localStorage.getItem("batteryData");
+    return savedData ? JSON.parse(savedData) : null;
+  } catch (error) {
+    console.error("Error loading safety data:", error);
+    return null;
+  }
+}
 
 function SafetyRisk() {
-  const [batteryData, setBatteryData] = useState(null);
+  const [batteryData] = useState(loadBatteryData);
 
-  useEffect(() => {
-    try {
-      const savedData = localStorage.getItem("batteryData");
-
-      if (savedData) {
-        setBatteryData(JSON.parse(savedData));
-      }
-    } catch (error) {
-      console.error("Error loading safety data:", error);
-    }
-  }, []);
-
-  const data = batteryData || {
-    thermalRisk: "Low",
-    electricalRisk: "Low",
-    chargingRisk: "Low",
-    cellImbalanceRisk: "Low",
-  };
+  const data = batteryData || {};
 
   function getRiskClass(risk) {
+    if (!risk) {
+      return "risk-unavailable";
+    }
+
     if (risk === "High") {
       return "risk-high";
     }
@@ -43,7 +40,7 @@ function SafetyRisk() {
         <span>🔥 Thermal Risk</span>
 
         <span className={getRiskClass(data.thermalRisk)}>
-          {data.thermalRisk}
+          {data.thermalRisk || "Unavailable"}
         </span>
       </div>
 
@@ -52,7 +49,7 @@ function SafetyRisk() {
         <span>⚡ Electrical Risk</span>
 
         <span className={getRiskClass(data.electricalRisk)}>
-          {data.electricalRisk}
+          {data.electricalRisk || "Unavailable"}
         </span>
       </div>
 
@@ -61,7 +58,7 @@ function SafetyRisk() {
         <span>🔌 Charging Risk</span>
 
         <span className={getRiskClass(data.chargingRisk)}>
-          {data.chargingRisk}
+          {data.chargingRisk || "Unavailable"}
         </span>
       </div>
 
@@ -70,7 +67,7 @@ function SafetyRisk() {
         <span>⚖️ Cell Imbalance</span>
 
         <span className={getRiskClass(data.cellImbalanceRisk)}>
-          {data.cellImbalanceRisk}
+          {data.cellImbalanceRisk || "Unavailable"}
         </span>
       </div>
 

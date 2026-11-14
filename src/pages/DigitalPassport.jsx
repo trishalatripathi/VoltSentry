@@ -1,22 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function DigitalPassport() {
   const navigate = useNavigate();
 
-  const [batteryData, setBatteryData] = useState(null);
-
-  useEffect(() => {
+  const [batteryData] = useState(() => {
     const savedData = localStorage.getItem("batteryData");
-
     if (savedData) {
       try {
-        setBatteryData(JSON.parse(savedData));
+        return JSON.parse(savedData);
       } catch (error) {
         console.error("Error reading battery data:", error);
       }
     }
-  }, []);
+    return null;
+  });
 
   const data = batteryData || {};
 
@@ -39,9 +37,6 @@ function DigitalPassport() {
   const maximumCellVoltageDelta =
     data.maximumCellVoltageDelta ?? "Not available";
 
-  const maximumCurrent =
-    data.maximumCurrent ?? "Not available";
-
   const currentSOC =
     data.currentSOC ?? "Not available";
 
@@ -53,7 +48,7 @@ function DigitalPassport() {
    * Do NOT display a fake percentage.
    */
   const currentSOH =
-    data.currentSOH ?? null;
+    data.sohMethod ? data.currentSOH ?? null : null;
 
   const initialSOH =
     data.initialSOH ?? null;
