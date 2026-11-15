@@ -149,4 +149,4 @@ This project currently does not specify a license.
 
 ## Author
 
-Trishala Tripathi
+Trishala Tripathi ,Himani Panigrahy, Naina Prasad and Lavanya Trivedi
