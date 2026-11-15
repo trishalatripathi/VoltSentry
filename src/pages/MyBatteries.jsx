@@ -1,64 +1,51 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+function loadBatteries() {
+  const savedData = localStorage.getItem("batteryData");
+  if (!savedData) {
+    return [];
+  }
+
+  try {
+    const data = JSON.parse(savedData);
+    const measuredSOH = data.sohMethod ? data.currentSOH : null;
+
+    return [{
+      id: data.batteryId || "Unknown",
+      vehicle: data.vehicleName || "Unknown Vehicle",
+      health: measuredSOH ?? "N/A",
+      risk:
+        data.thermalRisk === "High" ||
+          data.electricalRisk === "High" ||
+          data.chargingRisk === "High"
+          ? "High"
+          : data.thermalRisk === "Medium" ||
+            data.electricalRisk === "Medium" ||
+            data.chargingRisk === "Medium"
+            ? "Medium"
+            : "Low",
+      cycles: data.lifetimeCycles ?? "N/A",
+      capacity: data.currentCapacity
+        ? `${data.currentCapacity} kWh`
+        : "N/A",
+      status: measuredSOH === null || measuredSOH === undefined
+        ? "Needs Assessment"
+        : measuredSOH >= 80
+          ? "Good"
+          : measuredSOH >= 60
+            ? "Monitor"
+            : "Needs Attention",
+    }];
+  } catch (error) {
+    console.error("Error loading battery data:", error);
+    return [];
+  }
+}
 
 function MyBatteries() {
   const navigate = useNavigate();
-
-  const [batteries, setBatteries] = useState([]);
-
-  useEffect(() => {
-    const savedData = localStorage.getItem("batteryData");
-
-    if (savedData) {
-      try {
-        const data = JSON.parse(savedData);
-
-        const battery = {
-          id: data.batteryId || "Unknown",
-          vehicle: data.vehicleName || "Unknown Vehicle",
-
-          health:
-            data.currentSOH !== undefined
-              ? data.currentSOH
-              : "N/A",
-
-          risk:
-            data.thermalRisk === "High" ||
-              data.electricalRisk === "High" ||
-              data.chargingRisk === "High"
-              ? "High"
-              : data.thermalRisk === "Medium" ||
-                data.electricalRisk === "Medium" ||
-                data.chargingRisk === "Medium"
-                ? "Medium"
-                : "Low",
-
-          cycles:
-            data.lifetimeCycles ?? "N/A",
-
-          capacity:
-            data.currentCapacity
-              ? `${data.currentCapacity} kWh`
-              : "N/A",
-
-          status:
-            data.currentSOH >= 80
-              ? "Good"
-              : data.currentSOH >= 60
-                ? "Monitor"
-                : "Needs Attention",
-        };
-
-        setBatteries([battery]);
-
-      } catch (error) {
-        console.error(
-          "Error loading battery data:",
-          error
-        );
-      }
-    }
-  }, []);
+  const [batteries] = useState(loadBatteries);
 
   return (
     <div className="my-batteries-page">

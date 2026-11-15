@@ -1,0 +1,290 @@
+.faq-chatbot {
+  --faq-panel-bg: #07110d;
+  --faq-panel-border: rgba(0, 255, 136, 0.24);
+  --faq-muted: #a4b2aa;
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1200;
+  font-family: inherit;
+}
+
+.faq-chatbot__toggle {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(0, 255, 136, 0.65);
+  border-radius: 50%;
+  color: #02150b;
+  background: var(--primary-neon, #00ff88);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.48), 0 0 22px rgba(0, 255, 136, 0.22);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.faq-chatbot__toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 28px rgba(0, 255, 136, 0.34);
+}
+
+.faq-chatbot__toggle svg {
+  width: 27px;
+  height: 27px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.faq-chatbot__panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 14px);
+  display: flex;
+  width: min(390px, calc(100vw - 32px));
+  height: min(610px, calc(100dvh - 172px));
+  min-height: 250px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--faq-panel-border);
+  border-radius: 18px;
+  color: var(--text-white, #f2f5f3);
+  background: var(--faq-panel-bg);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.62), 0 0 32px rgba(0, 255, 136, 0.08);
+}
+
+.faq-chatbot__header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--faq-panel-border);
+  background: linear-gradient(120deg, rgba(0, 255, 136, 0.1), transparent 70%);
+}
+
+.faq-chatbot__identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+}
+
+.faq-chatbot__avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 12px;
+  color: var(--primary-neon, #00ff88);
+  background: rgba(0, 255, 136, 0.09);
+}
+
+.faq-chatbot__avatar svg {
+  width: 22px;
+  height: 22px;
+}
+
+.faq-chatbot__identity h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.faq-chatbot__identity p {
+  margin: 2px 0 0;
+  color: var(--faq-muted);
+  font-size: 12px;
+}
+
+.faq-chatbot__close {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--faq-muted);
+  background: transparent;
+}
+
+.faq-chatbot__close:hover {
+  border-color: var(--faq-panel-border);
+  color: var(--text-white, #f2f5f3);
+  background: rgba(0, 255, 136, 0.07);
+}
+
+.faq-chatbot__close svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.faq-chatbot__content {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  scrollbar-color: rgba(0, 255, 136, 0.35) transparent;
+  scrollbar-width: thin;
+}
+
+.faq-chatbot__welcome,
+.faq-chatbot__message {
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.faq-chatbot__welcome {
+  margin-bottom: 18px;
+  padding: 12px 13px;
+  color: var(--text-white, #f2f5f3);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.faq-chatbot__questions {
+  display: grid;
+  gap: 17px;
+  padding-bottom: 4px;
+}
+
+.faq-chatbot__category h3 {
+  margin: 0 0 8px;
+  color: var(--primary-neon, #00ff88);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.faq-chatbot__question-list {
+  display: grid;
+  gap: 7px;
+}
+
+.faq-chatbot__question {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 11px;
+  border: 1px solid rgba(0, 255, 136, 0.14);
+  border-radius: 10px;
+  color: var(--text-white, #f2f5f3);
+  background: rgba(0, 255, 136, 0.035);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.faq-chatbot__question:hover {
+  border-color: rgba(0, 255, 136, 0.48);
+  background: rgba(0, 255, 136, 0.09);
+}
+
+.faq-chatbot__question span {
+  flex: 0 0 auto;
+  color: var(--primary-neon, #00ff88);
+  font-size: 19px;
+  line-height: 1;
+}
+
+.faq-chatbot__conversation {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.faq-chatbot__back {
+  align-self: flex-start;
+  padding: 5px 0;
+  border: 0;
+  color: var(--primary-neon, #00ff88);
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.faq-chatbot__back span {
+  margin-right: 4px;
+}
+
+.faq-chatbot__message--question {
+  max-width: 90%;
+  align-self: flex-end;
+  padding: 10px 12px;
+  border-color: rgba(0, 255, 136, 0.22);
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.faq-chatbot__message--answer {
+  padding: 13px;
+  color: var(--text-white, #f2f5f3);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.faq-chatbot :focus-visible {
+  outline: 2px solid var(--primary-neon, #00ff88);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .faq-chatbot {
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .faq-chatbot__toggle {
+    width: 54px;
+    height: 54px;
+  }
+
+  .faq-chatbot__panel {
+    width: min(390px, calc(100vw - 32px));
+    height: min(560px, calc(100dvh - 244px - env(safe-area-inset-bottom, 0px)));
+    max-height: calc(100vh - 244px - env(safe-area-inset-bottom, 0px));
+    min-height: 220px;
+    right: 0;
+    border-radius: 16px;
+  }
+
+  .faq-chatbot__header {
+    padding: 13px 14px;
+  }
+
+  .faq-chatbot__content {
+    padding: 13px;
+  }
+}
+
+@media (max-height: 420px) {
+  .faq-chatbot__panel {
+    height: calc(100dvh - 244px);
+    min-height: 140px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-chatbot__toggle,
+  .faq-chatbot__question {
+    transition: none;
+  }
+}

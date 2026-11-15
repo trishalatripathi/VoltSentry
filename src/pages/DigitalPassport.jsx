@@ -1,22 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { downloadBatteryReportPdf } from "../utils/generateBatteryPdf";
 
 function DigitalPassport() {
   const navigate = useNavigate();
 
-  const [batteryData, setBatteryData] = useState(null);
-
-  useEffect(() => {
+  const [batteryData] = useState(() => {
     const savedData = localStorage.getItem("batteryData");
-
     if (savedData) {
       try {
-        setBatteryData(JSON.parse(savedData));
+        return JSON.parse(savedData);
       } catch (error) {
         console.error("Error reading battery data:", error);
       }
     }
-  }, []);
+    return null;
+  });
 
   const data = batteryData || {};
 
@@ -39,9 +38,6 @@ function DigitalPassport() {
   const maximumCellVoltageDelta =
     data.maximumCellVoltageDelta ?? "Not available";
 
-  const maximumCurrent =
-    data.maximumCurrent ?? "Not available";
-
   const currentSOC =
     data.currentSOC ?? "Not available";
 
@@ -53,7 +49,7 @@ function DigitalPassport() {
    * Do NOT display a fake percentage.
    */
   const currentSOH =
-    data.currentSOH ?? null;
+    data.sohMethod ? data.currentSOH ?? null : null;
 
   const initialSOH =
     data.initialSOH ?? null;
@@ -113,8 +109,17 @@ function DigitalPassport() {
           </p>
         </div>
 
-        <div className="passport-status">
-          ✓ {data.verificationStatus || "Analysis Complete"}
+        <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+          <button
+            className="analyze-btn pdf-btn"
+            style={{ padding: "8px 18px", fontSize: "0.85rem", cursor: "pointer" }}
+            onClick={() => downloadBatteryReportPdf(batteryData)}
+          >
+            📥 Download PDF Passport
+          </button>
+          <div className="passport-status">
+            ✓ {data.verificationStatus || "Analysis Complete"}
+          </div>
         </div>
 
       </div>

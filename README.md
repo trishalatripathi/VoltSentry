@@ -27,6 +27,7 @@ The app is built with React and Vite, and is designed to be deployed as a front-
   - Electrical risk
   - Charging risk
   - Cell imbalance risk
+- Floating, local FAQ assistant available throughout the app
 - Responsive UI optimized for browser-based monitoring
 
 ## Tech Stack
@@ -103,7 +104,35 @@ npm run dev       # start development server
 npm run build     # build production bundle
 npm run preview   # preview production build
 npm run lint      # run ESLint
+npm test          # run battery CSV validation and metric tests
 ```
+
+## Battery CSV sample
+
+`test_battery_data.csv` is the synthetic demonstration dataset used by the
+Analyze Battery page's **Download Sample CSV** and **Load Sample Dataset**
+actions. The values are illustrative only; they are not real EV measurements.
+The file includes timestamped temperature (°C), pack current (A; positive is
+discharge and negative is charging/energy recovery), pack voltage (V),
+cell-voltage delta (mV), cycle index, state of charge (%), a provenance label,
+and synthetic `measured_capacity_ah` / `rated_capacity_ah` values. Its changing
+measurements are provided to demonstrate the import, preview, and history
+charts. With no saved analysis, the Dashboard calculates and labels SOH from
+the sample's latest capacity record as demo data.
+
+Upload it through **Choose CSV File**, or use **Load Sample Dataset** to preview
+it without downloading first. Custom CSV files must include the same five
+required measurement columns; `Timestamp`, `Pack Voltage (V)`, `Battery ID`,
+and `Data Provenance` are optional. CSV parsing checks numeric values, SOC
+range, units in headers, row structure, timestamps, and single-battery data
+before enabling analysis. SOH is not inferred; it remains unavailable unless a
+valid capacity-based method is supported. To calculate SOH, include either
+`Measured Capacity` or `Current Capacity` and either `Rated Capacity` or
+`Design Capacity` columns with matching units, for example
+`Measured Capacity (kWh)` and `Rated Capacity (kWh)` (also supports `Ah` and
+`Wh`). SOH is measured capacity divided by rated/design capacity, multiplied
+by 100; values must be positive and measured capacity cannot exceed rated
+capacity.
 
 ## Deployment
 

@@ -333,8 +333,34 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         dropzoneBox.style.display = 'none';
         modalPassportPreview.style.display = 'block';
-        simulateGenBtn.textContent = '? Passport Generated & Verified!';
+        simulateGenBtn.textContent = '✓ Passport Generated & Verified!';
       }, 700);
+    });
+  }
+
+  const dropzoneBrowseBtn = document.querySelector('#dropzoneBox button');
+  if (dropzoneBrowseBtn) {
+    dropzoneBrowseBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetUrl = window.location.port === '8080' ? 'http://localhost:5173/analyze' : '/analyze';
+      if (window.top && window.top !== window) {
+        window.top.location.href = targetUrl;
+      } else {
+        window.location.href = targetUrl;
+      }
+    });
+  }
+
+  const uploadFlowStep = document.querySelector('.flow-step-item');
+  if (uploadFlowStep) {
+    uploadFlowStep.style.cursor = 'pointer';
+    uploadFlowStep.addEventListener('click', () => {
+      const targetUrl = window.location.port === '8080' ? 'http://localhost:5173/analyze' : '/analyze';
+      if (window.top && window.top !== window) {
+        window.top.location.href = targetUrl;
+      } else {
+        window.location.href = targetUrl;
+      }
     });
   }
 

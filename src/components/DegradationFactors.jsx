@@ -1,198 +1,173 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+
+function loadBatteryData() {
+  try {
+    const savedData = localStorage.getItem("batteryData");
+    return savedData ? JSON.parse(savedData) : null;
+  } catch (error) {
+    console.error("Error loading battery condition data:", error);
+    return null;
+  }
+}
+
+function displayValue(value, unit = "") {
+  return value === null ||
+    value === undefined ||
+    !Number.isFinite(Number(value))
+    ? "Unavailable"
+    : `${value}${unit}`;
+}
 
 function DegradationFactors({ batteryData: propData }) {
-  const [batteryData, setBatteryData] = useState(propData || null);
-
-  useEffect(() => {
-    if (propData !== undefined) {
-      setBatteryData(propData);
-      return;
-    }
-    try {
-      const savedData = localStorage.getItem("batteryData");
-      if (savedData) {
-        setBatteryData(JSON.parse(savedData));
-      } else {
-        setBatteryData(null);
-      }
-    } catch (error) {
-      console.error("Error loading degradation data:", error);
-    }
+  const batteryData = useMemo(() => {
+    if (propData !== undefined) return propData;
+    return loadBatteryData();
   }, [propData]);
 
   const hasData = !!batteryData;
 
-  const data = hasData ? batteryData : {
-    maximumTemperature: 0,
-    maximumCurrent: 0,
-    lifetimeCycles: 0,
-    maximumCellVoltageDelta: 0,
-  };
+  const conditions = [
+    [
+      "Maximum temperature",
+      displayValue(batteryData?.maximumTemperature, " °C"),
+    ],
+    [
+      "Maximum absolute pack current",
+      displayValue(batteryData?.maximumCurrent, " A"),
+    ],
+    [
+      "Maximum cell-voltage delta",
+      displayValue(batteryData?.maximumCellVoltageDelta, " mV"),
+    ],
+    [
+      "Latest cycle index",
+      displayValue(
+        batteryData?.latestCycle ?? batteryData?.lifetimeCycles,
+      ),
+    ],
+  ];
 
-  /*
-   * These are frontend indicators based on the available CSV data.
-   * If no CSV is uploaded, contributions remain at 0%.
-   */
+  const maxTemp = Number(batteryData?.maximumTemperature) || 0;
+  const maxCurr = Number(batteryData?.maximumCurrent) || 0;
+  const cycles = Number(batteryData?.lifetimeCycles ?? batteryData?.latestCycle) || 0;
+  const maxDelta = Number(batteryData?.maximumCellVoltageDelta) || 0;
 
   const temperatureContribution = !hasData
     ? 0
-    : data.maximumTemperature >= 40 ? 36 : 20;
+    : maxTemp >= 40
+      ? 36
+      : 20;
 
   const fastChargingContribution = !hasData
     ? 0
-    : data.maximumCurrent >= 80 ? 28 : 15;
+    : maxCurr >= 80
+      ? 28
+      : 15;
 
   const cycleContribution = !hasData
     ? 0
-    : data.lifetimeCycles >= 700
+    : cycles >= 700
       ? 22
-      : data.lifetimeCycles >= 400
+      : cycles >= 400
         ? 15
         : 10;
 
   const imbalanceContribution = !hasData
     ? 0
-    : data.maximumCellVoltageDelta >= 50
+    : maxDelta >= 50
       ? 14
-      : data.maximumCellVoltageDelta >= 30
+      : maxDelta >= 30
         ? 10
         : 5;
 
   const degradationTag = !hasData
     ? "0% (No Data)"
-    : (data.maximumTemperature >= 40 || data.maximumCellVoltageDelta >= 50
-        ? "Moderate"
-        : "Low");
+    : maxTemp >= 40 || maxDelta >= 50
+      ? "Moderate"
+      : "Low";
 
   return (
     <div className="degradation-factors glass-panel">
-
       {/* Degradation Indicator */}
       <div className="degradation-rate">
-
-        <span>
-          Degradation Indicator
-        </span>
-
-        <strong>
-          {degradationTag}
-        </strong>
-
+        <span>Degradation Indicator</span>
+        <strong>{degradationTag}</strong>
       </div>
 
+      {/* Recorded Battery Conditions */}
+      <h3>Recorded Battery Conditions</h3>
+      {conditions.map(([label, value]) => (
+        <div className="factor" key={label}>
+          <div>
+            <span>{label}</span>
+            <small>{value}</small>
+          </div>
+        </div>
+      ))}
 
-      <h3>
-        Primary Degradation Factors
-      </h3>
-
+      {/* Primary Degradation Factors */}
+      <h3 style={{ marginTop: "16px" }}>Primary Degradation Factors</h3>
 
       {/* Temperature */}
       <div className="factor">
-
         <div>
-          <span>
-            High Temperature
-          </span>
-
-          <small>
-            {temperatureContribution}% contribution
-          </small>
+          <span>High Temperature</span>
+          <small>{temperatureContribution}% contribution</small>
         </div>
-
         <div className="factor-bar">
-
           <div
             className="factor-fill"
-            style={{
-              width: `${temperatureContribution}%`,
-            }}
+            style={{ width: `${temperatureContribution}%` }}
           />
-
         </div>
-
       </div>
-
 
       {/* Fast Charging */}
       <div className="factor">
-
         <div>
-          <span>
-            Fast Charging
-          </span>
-
-          <small>
-            {fastChargingContribution}% contribution
-          </small>
+          <span>Fast Charging</span>
+          <small>{fastChargingContribution}% contribution</small>
         </div>
-
         <div className="factor-bar">
-
           <div
             className="factor-fill"
-            style={{
-              width: `${fastChargingContribution}%`,
-            }}
+            style={{ width: `${fastChargingContribution}%` }}
           />
-
         </div>
-
       </div>
-
 
       {/* Charging Cycles */}
       <div className="factor">
-
         <div>
-          <span>
-            Charging Cycles
-          </span>
-
-          <small>
-            {cycleContribution}% contribution
-          </small>
+          <span>Charging Cycles</span>
+          <small>{cycleContribution}% contribution</small>
         </div>
-
         <div className="factor-bar">
-
           <div
             className="factor-fill"
-            style={{
-              width: `${cycleContribution}%`,
-            }}
+            style={{ width: `${cycleContribution}%` }}
           />
-
         </div>
-
       </div>
-
 
       {/* Cell Imbalance */}
       <div className="factor">
-
         <div>
-          <span>
-            Cell Imbalance
-          </span>
-
-          <small>
-            {imbalanceContribution}% contribution
-          </small>
+          <span>Cell Imbalance</span>
+          <small>{imbalanceContribution}% contribution</small>
         </div>
-
         <div className="factor-bar">
-
           <div
             className="factor-fill"
-            style={{
-              width: `${imbalanceContribution}%`,
-            }}
+            style={{ width: `${imbalanceContribution}%` }}
           />
-
         </div>
-
       </div>
 
+      <p className="unavailable-metric-note">
+        These recorded measurements are not degradation percentages or a
+        state-of-health estimate.
+      </p>
     </div>
   );
 }
