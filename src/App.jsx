@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState } from "react";
+import sampleBatteryCsv from "../test_battery_data.csv?raw";
 
 import StatCard from "./components/StatCard";
 import SafetyRisk from "./components/SafetyRisk";
@@ -21,7 +22,17 @@ import {
 import DigitalPassport from "./pages/DigitalPassport";
 import AnalyzeBattery from "./pages/AnalyzeBattery";
 import MyBatteries from "./pages/MyBatteries";
+import FAQChatbot from "./components/FAQChatbot";
+import {
+  BATTERY_DATA_UPLOAD_ATTEMPTED_KEY,
+  calculateBatteryMetrics,
+  parseBatteryCsv,
+} from "./utils/batteryCsv";
 
+const demoCsvResult = parseBatteryCsv(sampleBatteryCsv);
+const demoBatteryMetrics = demoCsvResult.canAnalyze
+  ? calculateBatteryMetrics(demoCsvResult.records)
+  : null;
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -43,12 +54,17 @@ function Dashboard() {
     return null;
   });
 
+  const [uploadWasAttempted] = useState(
+    () => localStorage.getItem(BATTERY_DATA_UPLOAD_ATTEMPTED_KEY) === "true",
+  );
+  const isDemoMode = batteryData === null && !uploadWasAttempted;
+  const sohSource = isDemoMode ? demoBatteryMetrics : batteryData;
   const currentSOH =
-    batteryData?.sohMethod === "measured-capacity/rated-capacity" &&
-    Number.isFinite(batteryData.currentSOH) &&
-    batteryData.currentSOH > 0 &&
-    batteryData.currentSOH <= 100
-      ? batteryData.currentSOH
+    sohSource?.sohMethod === "measured-capacity/rated-capacity" &&
+    Number.isFinite(sohSource.currentSOH) &&
+    sohSource.currentSOH > 0 &&
+    sohSource.currentSOH <= 100
+      ? sohSource.currentSOH
       : null;
 
   const data = {
@@ -229,8 +245,16 @@ function Dashboard() {
               ? "Unavailable"
               : `${data.currentSOH.toFixed(1)}%`}
             unit=""
-            status={data.currentSOH === null ? "Capacity data required" : "Measured"}
-            statusClass={data.currentSOH === null ? "status" : "status good"}
+            status={data.currentSOH === null
+              ? "Valid measured and rated capacity required"
+              : isDemoMode
+                ? "DEMO DATA"
+                : "Measured"}
+            statusClass={data.currentSOH === null
+              ? "status"
+              : isDemoMode
+                ? "status demo-data-label"
+                : "status good"}
           />
 
 
@@ -281,6 +305,9 @@ function Dashboard() {
               <small>
                 State of Health
               </small>
+              {isDemoMode && data.currentSOH !== null && (
+                <small className="demo-data-label">DEMO DATA</small>
+              )}
             </div>
 
 
@@ -290,7 +317,7 @@ function Dashboard() {
 
               <strong>
                 {data.currentSOH === null
-                  ? "unavailable — measured capacity data required"
+                  ? "unavailable - valid measured and rated capacity data required"
                   : data.currentSOH >= 80
                     ? "Good"
                     : "Needs Attention"}
@@ -425,6 +452,8 @@ function App() {
         />
 
       </Routes>
+
+      <FAQChatbot />
 
     </BrowserRouter>
 

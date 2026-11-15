@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import logoImg from "../assets/voltsentry-logo.png";
 import sampleCsvUrl from "../../test_battery_data.csv?url";
 import {
+  BATTERY_DATA_UPLOAD_ATTEMPTED_KEY,
   calculateBatteryMetrics,
   parseBatteryCsv,
 } from "../utils/batteryCsv";
@@ -47,6 +48,7 @@ function AnalyzeBattery() {
   async function importCsv(selectedFile, filename = selectedFile.name) {
     const requestId = ++importRequestRef.current;
     localStorage.removeItem("batteryData");
+    localStorage.setItem(BATTERY_DATA_UPLOAD_ATTEMPTED_KEY, "true");
     setSelectedFilename(filename);
     setImportResult(null);
     setBatteryMetrics(null);
@@ -113,6 +115,7 @@ function AnalyzeBattery() {
   async function loadSampleDataset() {
     const requestId = ++importRequestRef.current;
     localStorage.removeItem("batteryData");
+    localStorage.removeItem(BATTERY_DATA_UPLOAD_ATTEMPTED_KEY);
     setIsLoading(true);
     setSelectedFilename("voltsentry_sample_battery_data.csv");
     setImportResult(null);
@@ -163,6 +166,7 @@ function AnalyzeBattery() {
   function clearDataset() {
     importRequestRef.current += 1;
     localStorage.removeItem("batteryData");
+    localStorage.removeItem(BATTERY_DATA_UPLOAD_ATTEMPTED_KEY);
     setSelectedFilename("");
     setImportResult(null);
     setBatteryMetrics(null);
@@ -253,6 +257,7 @@ function AnalyzeBattery() {
       "batteryData",
       JSON.stringify(analysis)
     );
+    localStorage.removeItem(BATTERY_DATA_UPLOAD_ATTEMPTED_KEY);
 
     alert(
       `Battery data submitted successfully!\n\n${batteryMetrics.recordCount} records detected.`

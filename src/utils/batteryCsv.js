@@ -1,5 +1,7 @@
 import Papa from "papaparse";
 
+export const BATTERY_DATA_UPLOAD_ATTEMPTED_KEY = "batteryDataUploadAttempted";
+
 export const REQUIRED_BATTERY_COLUMNS = [
   "Battery Temperature (C)",
   "Pack Current (A)",

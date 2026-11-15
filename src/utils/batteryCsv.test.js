@@ -40,6 +40,16 @@ describe("battery CSV validation", () => {
     assert.equal(result.records.length, 12);
     assert.equal(result.isSynthetic, true);
     assert.ok(result.headers.includes("Timestamp"));
+    assert.ok(result.headers.includes("measured_capacity_ah"));
+    assert.ok(result.headers.includes("rated_capacity_ah"));
+
+    const metrics = calculateBatteryMetrics(result.records);
+    assert.equal(metrics.measuredCapacity, 104.8);
+    assert.equal(metrics.referenceCapacity, 126.4);
+    assert.equal(
+      metrics.currentSOH,
+      Number(((metrics.measuredCapacity / metrics.referenceCapacity) * 100).toFixed(2)),
+    );
   });
 
   it("accepts a valid custom CSV without optional columns", () => {

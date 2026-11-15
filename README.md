@@ -27,6 +27,7 @@ The app is built with React and Vite, and is designed to be deployed as a front-
   - Electrical risk
   - Charging risk
   - Cell imbalance risk
+- Floating, local FAQ assistant available throughout the app
 - Responsive UI optimized for browser-based monitoring
 
 ## Tech Stack
@@ -113,9 +114,11 @@ Analyze Battery page's **Download Sample CSV** and **Load Sample Dataset**
 actions. The values are illustrative only; they are not real EV measurements.
 The file includes timestamped temperature (°C), pack current (A; positive is
 discharge and negative is charging/energy recovery), pack voltage (V),
-cell-voltage delta (mV), cycle index, state of charge (%), and a provenance
-label. Its changing measurements are provided to demonstrate the import,
-preview, and history charts.
+cell-voltage delta (mV), cycle index, state of charge (%), a provenance label,
+and synthetic `measured_capacity_ah` / `rated_capacity_ah` values. Its changing
+measurements are provided to demonstrate the import, preview, and history
+charts. With no saved analysis, the Dashboard calculates and labels SOH from
+the sample's latest capacity record as demo data.
 
 Upload it through **Choose CSV File**, or use **Load Sample Dataset** to preview
 it without downloading first. Custom CSV files must include the same five

@@ -1,13 +1,13 @@
-Timestamp,Battery Temperature (C),Pack Current (A),Pack Voltage (V),Cell Voltage Delta (mV),Cycle Index,State of Charge (%),Data Provenance
-2025-11-14T08:00:00Z,27.8,18.0,398.2,18,742,78.0,Synthetic demonstration data - not real EV measurements
-2025-11-14T08:10:00Z,29.1,32.0,397.8,19,742,76.8,Synthetic demonstration data - not real EV measurements
-2025-11-14T08:20:00Z,31.4,46.0,397.1,21,742,75.2,Synthetic demonstration data - not real EV measurements
-2025-11-14T08:30:00Z,34.2,58.0,396.4,23,742,73.4,Synthetic demonstration data - not real EV measurements
-2025-11-14T08:40:00Z,36.0,42.0,396.8,24,742,72.1,Synthetic demonstration data - not real EV measurements
-2025-11-14T08:50:00Z,34.8,-12.0,397.5,22,742,72.8,Synthetic demonstration data - not real EV measurements
-2025-11-14T09:00:00Z,33.2,-28.0,398.4,21,742,74.0,Synthetic demonstration data - not real EV measurements
-2025-11-14T09:10:00Z,31.0,-16.0,399.1,20,742,74.8,Synthetic demonstration data - not real EV measurements
-2025-11-14T09:20:00Z,30.4,24.0,398.7,21,742,73.9,Synthetic demonstration data - not real EV measurements
-2025-11-14T09:30:00Z,32.6,39.0,398.0,24,742,72.5,Synthetic demonstration data - not real EV measurements
-2025-11-14T09:40:00Z,35.1,31.0,398.6,26,742,73.6,Synthetic demonstration data - not real EV measurements
-2025-11-14T09:50:00Z,33.7,-8.0,399.3,25,743,75.0,Synthetic demonstration data - not real EV measurements
+Timestamp,Battery Temperature (C),Pack Current (A),Pack Voltage (V),Cell Voltage Delta (mV),Cycle Index,State of Charge (%),Data Provenance,rated_capacity_ah,measured_capacity_ah
+2025-11-14T08:00:00Z,27.8,18.0,398.2,18,742,78.0,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T08:10:00Z,29.1,32.0,397.8,19,742,76.8,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T08:20:00Z,31.4,46.0,397.1,21,742,75.2,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T08:30:00Z,34.2,58.0,396.4,23,742,73.4,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T08:40:00Z,36.0,42.0,396.8,24,742,72.1,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T08:50:00Z,34.8,-12.0,397.5,22,742,72.8,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T09:00:00Z,33.2,-28.0,398.4,21,742,74.0,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T09:10:00Z,31.0,-16.0,399.1,20,742,74.8,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T09:20:00Z,30.4,24.0,398.7,21,742,73.9,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T09:30:00Z,32.6,39.0,398.0,24,742,72.5,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T09:40:00Z,35.1,31.0,398.6,26,742,73.6,Synthetic demonstration data - not real EV measurements,126.4,104.8
+2025-11-14T09:50:00Z,33.7,-8.0,399.3,25,743,75.0,Synthetic demonstration data - not real EV measurements,126.4,104.8
