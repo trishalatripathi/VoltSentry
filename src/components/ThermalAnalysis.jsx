@@ -9,30 +9,44 @@ import {
     ResponsiveContainer,
 } from "recharts";
 
-function ThermalAnalysis() {
+function ThermalAnalysis({ batteryData: propData }) {
     const [chartData, setChartData] = useState([]);
     const [metrics, setMetrics] = useState({
         maxBatteryTemp: 0,
         avgBatteryTemp: 0,
-        ambientTemp: 26.1, // Mock constant or fetched
+        ambientTemp: 0,
     });
     const [status, setStatus] = useState({
-        condition: "Normal",
-        stability: "Good",
-        risk: "Low",
-        badgeClass: "badge-success",
+        condition: "0",
+        stability: "No Data",
+        risk: "0",
+        badgeClass: "badge-none",
     });
 
     useEffect(() => {
         try {
             const savedData = localStorage.getItem("batteryData");
-            if (!savedData) return;
+            const batteryData = propData || (savedData ? JSON.parse(savedData) : null);
 
-            const batteryData = JSON.parse(savedData);
+            if (!batteryData || !batteryData.rawData) {
+                setMetrics({
+                    maxBatteryTemp: 0,
+                    avgBatteryTemp: 0,
+                    ambientTemp: 0,
+                });
+                setStatus({
+                    condition: "0",
+                    stability: "No Data",
+                    risk: "0",
+                    badgeClass: "badge-none",
+                });
+                setChartData([]);
+                return;
+            }
 
-            // Setup metrics
-            let maxBatt = batteryData.maximumTemperature ?? 41.2;
-            let avgBatt = batteryData.averageTemperature ?? 36.7;
+            // Setup metrics from actual CSV data
+            let maxBatt = Number(batteryData.maximumTemperature) || 0;
+            let avgBatt = Number(batteryData.averageTemperature) || 0;
             let ambTemp = 26.1;
 
             setMetrics({
@@ -41,10 +55,10 @@ function ThermalAnalysis() {
                 ambientTemp: ambTemp,
             });
 
-            // Setup status logic
+            // Setup status logic from actual CSV
             let cond = "Normal";
             let stab = "Good";
-            let rsk = "Low";
+            let rsk = batteryData.thermalRisk || "Low";
             let bClass = "badge-success";
 
             if (maxBatt >= 48) {
@@ -66,47 +80,22 @@ function ThermalAnalysis() {
                 badgeClass: bClass,
             });
 
-            // Setup Chart Data if rawData exists
-            if (batteryData.rawData && batteryData.rawData.length > 0) {
-                const rawData = batteryData.rawData;
-                // Take a small sample to avoid cramming
-                const step = Math.max(1, Math.floor(rawData.length / 30));
+            // Raw data to chart points
+            const raw = batteryData.rawData;
+            const step = Math.max(1, Math.floor(raw.length / 15));
+            const points = raw
+                .filter((_, idx) => idx % step === 0)
+                .map((row, idx) => ({
+                    time: `T+${idx * 5}m`,
+                    battery: Number(row["Battery Temperature (C)"]) || avgBatt,
+                    ambient: 26.1,
+                }));
 
-                let localTime = 0;
-                const chartPoints = rawData
-                    .filter((_, index) => index % step === 0)
-                    .map((row) => {
-                        localTime += 5; // pseudo time increment (mins)
-                        // if Ambient doesn't exist in CSV, simulate variations around 26
-                        let mockAmbient = 26.1 + (Math.random() - 0.5) * 2;
-                        let battTemp = Number(row["Battery Temperature (C)"]);
-                        if (isNaN(battTemp)) battTemp = avgBatt;
-
-                        return {
-                            time: `${localTime}m`,
-                            battery: battTemp,
-                            ambient: Number(mockAmbient.toFixed(1))
-                        };
-                    });
-
-                setChartData(chartPoints);
-            } else {
-                // Mock data if no raw data uploaded
-                setChartData([
-                    { time: '0m', battery: 32.1, ambient: 25.8 },
-                    { time: '5m', battery: 33.4, ambient: 26.0 },
-                    { time: '10m', battery: 35.2, ambient: 26.1 },
-                    { time: '15m', battery: 37.8, ambient: 26.2 },
-                    { time: '20m', battery: 38.5, ambient: 26.1 },
-                    { time: '25m', battery: 39.2, ambient: 26.3 },
-                    { time: '30m', battery: maxBatt, ambient: 26.5 },
-                ]);
-            }
-
-        } catch (error) {
-            console.error("Error loading thermal analysis data:", error);
+            setChartData(points);
+        } catch (e) {
+            console.error("Error setting thermal analysis data:", e);
         }
-    }, []);
+    }, [propData]);
 
     return (
         <div className="thermal-analysis-section">

@@ -1,17 +1,20 @@
 import { useNavigate } from "react-router-dom";
 
-function PassportPreview() {
+function PassportPreview({ batteryData: propData }) {
   const navigate = useNavigate();
 
   const savedData = localStorage.getItem("batteryData");
+  const batteryData = propData || (savedData ? JSON.parse(savedData) : null);
 
-  const batteryData = savedData
-    ? JSON.parse(savedData)
+  const hasData = !!batteryData;
+
+  const data = hasData
+    ? batteryData
     : {
-      vehicleName: "Tata Nexon EV",
-      batteryId: "BX-2026-001",
-      manufacturer: "Example Motors",
-      verificationStatus: "Verified",
+      vehicleName: "No Vehicle Connected",
+      batteryId: "000",
+      manufacturer: "Pending Upload",
+      verificationStatus: "Unverified (0%)",
     };
 
   return (
@@ -47,7 +50,7 @@ function PassportPreview() {
           <span>Vehicle</span>
 
           <strong>
-            {batteryData.vehicleName}
+            {data.vehicleName}
           </strong>
         </div>
 
@@ -56,7 +59,7 @@ function PassportPreview() {
           <span>Battery ID</span>
 
           <strong>
-            {batteryData.batteryId}
+            {data.batteryId}
           </strong>
         </div>
 
@@ -65,18 +68,18 @@ function PassportPreview() {
           <span>Manufacturer</span>
 
           <strong>
-            {batteryData.manufacturer}
+            {data.manufacturer || (hasData ? "Certified OEM" : "Pending Upload")}
           </strong>
         </div>
 
 
         <div>
           <span>Verification</span>
-          <strong className="badge-success">
+          <strong className={hasData ? "badge-success" : "badge-none"}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
-            {batteryData.verificationStatus}
+            {data.verificationStatus}
           </strong>
         </div>
 

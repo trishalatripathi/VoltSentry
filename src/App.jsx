@@ -27,79 +27,71 @@ function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [batteryData, setBatteryData] = useState(null);
-
-
-  // Load saved battery data
-  useEffect(() => {
+  const [batteryData, setBatteryData] = useState(() => {
     try {
-      const savedData = localStorage.getItem("batteryData");
+      // Automatic reset to 0 when opening the dashboard for the first time:
+      // If the user has not uploaded in this session, always start at 0
+      const hasUploadedInSession = sessionStorage.getItem("voltsentry_session_uploaded") === "true";
+      if (!hasUploadedInSession) {
+        localStorage.removeItem("batteryData");
+        sessionStorage.removeItem("batteryData");
+        return null;
+      }
 
+      const savedData = sessionStorage.getItem("batteryData") || localStorage.getItem("batteryData");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
-
-        if (parsedData && !Array.isArray(parsedData)) {
-          setBatteryData(parsedData);
+        if (parsedData && !Array.isArray(parsedData) && (parsedData.recordCount || parsedData.rawData || parsedData.currentSOH !== undefined)) {
+          return parsedData;
         }
       }
-    } catch (error) {
-      console.error("Error loading battery data:", error);
+    } catch (e) {}
+    return null;
+  });
 
-      localStorage.removeItem("batteryData");
-      setBatteryData(null);
-    }
-  }, []);
+  const [isUploadingNew, setIsUploadingNew] = useState(false);
 
+  // If user clicked to upload file, show the upload screen (the given photo)
+  if (isUploadingNew) {
+    return (
+      <AnalyzeBattery
+        onAnalysisComplete={(analysis) => {
+          sessionStorage.setItem("voltsentry_session_uploaded", "true");
+          sessionStorage.setItem("batteryData", JSON.stringify(analysis));
+          localStorage.setItem("batteryData", JSON.stringify(analysis));
+          setBatteryData(analysis);
+          setIsUploadingNew(false);
+        }}
+        showCancel={true}
+        onCancel={() => setIsUploadingNew(false)}
+      />
+    );
+  }
 
-  // Safe default values
+  const hasData = !!batteryData;
+
+  // Zero / Real values (NO DUMMY VALUES)
   const data = {
-    vehicleName:
-      batteryData?.vehicleName || "Tata Nexon EV",
-
-    batteryId:
-      batteryData?.batteryId || "BX-2026-001",
-
-    currentSOH:
-      batteryData?.currentSOH ?? 87,
-
-    averageTemperature:
-      batteryData?.averageTemperature ?? 32,
-
-    maximumTemperature:
-      batteryData?.maximumTemperature ?? 41,
-
-    lifetimeCycles:
-      batteryData?.lifetimeCycles ?? 742,
-
-    averageCellVoltageDelta:
-      batteryData?.averageCellVoltageDelta ?? 26.4,
-
-    maximumCellVoltageDelta:
-      batteryData?.maximumCellVoltageDelta ?? 51.2,
-
-    averageSOC:
-      batteryData?.averageSOC ?? 68.2,
-
-    verificationStatus:
-      batteryData?.verificationStatus || "Verified",
-
-    thermalRisk:
-      batteryData?.thermalRisk || "Low",
-
-    electricalRisk:
-      batteryData?.electricalRisk || "Low",
-
-    chargingRisk:
-      batteryData?.chargingRisk || "Low",
-
-    cellImbalanceRisk:
-      batteryData?.cellImbalanceRisk || "Low",
+    vehicleName: hasData ? (batteryData.vehicleName || "Connected EV") : "No Vehicle Uploaded",
+    batteryId: hasData ? (batteryData.batteryId || "000") : "000",
+    currentSOH: hasData ? (batteryData.currentSOH ?? 0) : 0,
+    averageTemperature: hasData ? (batteryData.averageTemperature ?? 0) : 0,
+    maximumTemperature: hasData ? (batteryData.maximumTemperature ?? 0) : 0,
+    lifetimeCycles: hasData ? (batteryData.lifetimeCycles ?? 0) : 0,
+    averageCellVoltageDelta: hasData ? (batteryData.averageCellVoltageDelta ?? 0) : 0,
+    maximumCellVoltageDelta: hasData ? (batteryData.maximumCellVoltageDelta ?? 0) : 0,
+    averageSOC: hasData ? (batteryData.averageSOC ?? 0) : 0,
+    verificationStatus: hasData ? (batteryData.verificationStatus || "Verified") : "Unverified (0%)",
+    thermalRisk: hasData ? (batteryData.thermalRisk || "0") : "0",
+    electricalRisk: hasData ? (batteryData.electricalRisk || "0") : "0",
+    chargingRisk: hasData ? (batteryData.chargingRisk || "0") : "0",
+    cellImbalanceRisk: hasData ? (batteryData.cellImbalanceRisk || "0") : "0",
   };
 
-
   // Overall safety risk
-  const overallRisk =
-    data.thermalRisk === "High" ||
+  const overallRisk = !hasData 
+    ? "0" 
+    : data.thermalRisk === "High" ||
       data.electricalRisk === "High" ||
       data.chargingRisk === "High" ||
       data.cellImbalanceRisk === "High"
@@ -111,14 +103,13 @@ function Dashboard() {
         ? "Medium"
         : "Low";
 
-
-  const riskStatus =
-    overallRisk === "Low"
-      ? "Safe"
-      : overallRisk === "Medium"
-        ? "Monitor"
+  const riskStatus = !hasData 
+    ? "000" 
+    : overallRisk === "Low" 
+      ? "Safe" 
+      : overallRisk === "Medium" 
+        ? "Monitor" 
         : "Attention";
-
 
   return (
     <div className="app">
@@ -153,7 +144,7 @@ function Dashboard() {
               ? "active"
               : ""
               }`}
-            onClick={() => navigate("/analyze")}
+            onClick={() => setIsUploadingNew(true)}
           >
             Analyze Battery
           </button>
@@ -183,45 +174,70 @@ function Dashboard() {
       {/* Main Content */}
       <main className="main-content">
 
-
         {/* Header */}
         <header className="header">
-
           <div>
-
             <h1>
               Battery Dashboard
             </h1>
 
             <p>
-              {batteryData
-                ? `Monitoring ${data.vehicleName}`
-                : "Monitor your EV battery health and safety"}
+              {hasData
+                ? `Monitoring ${data.vehicleName} (${data.vehicleNumber || data.batteryId}) • ${data.verificationStatus}`
+                : "No battery data uploaded • All indicators currently at 0"}
             </p>
-
           </div>
 
-
-          <button
-            className="analyze-btn"
-            onClick={() => navigate("/analyze")}
-          >
-            🔋 Analyze Battery
-          </button>
-
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <button
+              className="analyze-btn"
+              onClick={() => setIsUploadingNew(true)}
+            >
+              {hasData ? "⚡ Upload New CSV / Invoice" : "⚡ Upload File"}
+            </button>
+          </div>
         </header>
 
+        {/* Upload prompt card if zero values */}
+        {!hasData && (
+          <div className="upload-prompt-card glass-panel" style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            padding: '18px 24px',
+            background: 'rgba(0, 255, 136, 0.05)',
+            border: '1px solid rgba(0, 255, 136, 0.25)',
+            borderRadius: '16px',
+            marginBottom: '25px',
+          }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '12px',
+              background: 'rgba(0, 255, 136, 0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '22px',
+              flexShrink: 0
+            }}>📁</div>
+            <div>
+              <h3 style={{ margin: '0 0 4px', color: '#ffffff', fontSize: '1.05rem' }}>No Battery Telemetry Uploaded</h3>
+              <p style={{ margin: 0, color: 'var(--text-dim)', fontSize: '0.9rem' }}>
+                All indicators are currently <strong>0</strong>. Click the <strong>Upload File</strong> button above to provide your vehicle data and calculate real battery health, safety risk, and charging cycles.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Statistics */}
         <section className="stats">
-
           <StatCard
             title="Battery Health"
             value={data.currentSOH}
             unit="%"
-            status="Good"
+            status={hasData ? (data.currentSOH >= 80 ? "Good" : "Needs Attention") : "000"}
           />
-
 
           <StatCard
             title="Safety Risk"
@@ -229,26 +245,21 @@ function Dashboard() {
             status={riskStatus}
           />
 
-
           <StatCard
             title="Charging Cycles"
             value={data.lifetimeCycles}
             unit="Cycles"
           />
 
-
           <StatCard
             title="Average SOC"
             value={data.averageSOC}
             unit="%"
           />
-
         </section>
-
 
         {/* Battery Overview */}
         <section className="overview">
-
           <div className="panel glass-panel">
             <h2>
               Battery Overview
@@ -263,21 +274,21 @@ function Dashboard() {
               </small>
             </div>
 
-
             <p>
-
-              Battery health is currently{" "}
-
-              <strong>
-                {data.currentSOH >= 80
-                  ? "Good"
-                  : "Needs Attention"}
-              </strong>.
-
+              {hasData ? (
+                <>
+                  Battery health is currently{" "}
+                  <strong>
+                    {data.currentSOH >= 80 ? "Good" : "Needs Attention"}
+                  </strong>.
+                </>
+              ) : (
+                <>
+                  No battery data uploaded yet. Indicators are at <strong>0%</strong>. Upload a CSV file to begin analysis.
+                </>
+              )}
             </p>
-
           </div>
-
 
           {/* Quick Actions */}
           <div className="panel glass-panel">
@@ -285,56 +296,37 @@ function Dashboard() {
               Quick Actions
             </h2>
 
-
             <button
               className="action-btn"
-              onClick={() => navigate("/analyze")}
+              onClick={() => setIsUploadingNew(true)}
             >
-              🔋 Analyze Battery
+              ⚡ Upload File / CSV
             </button>
-
-
-            <button
-              className="action-btn"
-              onClick={() => navigate("/analyze")}
-            >
-              📊 View Analysis
-            </button>
-
 
             <button
               className="action-btn"
               onClick={() => navigate("/passport")}
             >
-              🪪 View Passport
+              🪪 View Digital Passport
             </button>
-
           </div>
-
         </section>
-
 
         {/* Safety Risk + Degradation Analysis */}
         <div className="analysis-row">
-
-          <SafetyRisk />
-
+          <SafetyRisk batteryData={batteryData} />
 
           <div>
-
-            <DegradationChart />
-
-            <DegradationFactors />
-
+            <DegradationChart batteryData={batteryData} />
+            <DegradationFactors batteryData={batteryData} />
           </div>
-
         </div>
 
         {/* Thermal Analysis */}
-        <ThermalAnalysis />
+        <ThermalAnalysis batteryData={batteryData} />
 
         {/* Second-Life Passport */}
-        <PassportPreview />
+        <PassportPreview batteryData={batteryData} />
 
 
         {/* Disclaimer */}

@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!activeItem || !navIndicator || window.innerWidth <= 768) return;
     const itemRect = activeItem.getBoundingClientRect();
     const parentRect = activeItem.parentElement.parentElement.getBoundingClientRect();
-    navIndicator.style.left = ${itemRect.left - parentRect.left}px;
-    navIndicator.style.width = ${itemRect.width}px;
-    navIndicator.style.top = ${itemRect.top - parentRect.top}px;
-    navIndicator.style.height = ${itemRect.height}px;
+    navIndicator.style.left = `${itemRect.left - parentRect.left}px`;
+    navIndicator.style.width = `${itemRect.width}px`;
+    navIndicator.style.top = `${itemRect.top - parentRect.top}px`;
+    navIndicator.style.height = `${itemRect.height}px`;
   }
 
   const initialActive = document.querySelector('.nav-links .nav-item.active');
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Scroll Spy for Navbar
-  const sectionIds = ['hero', 'word-vs-proof', 'inside-report', 'durable-design', 'cta-footer'];
+  const sectionIds = ['hero', 'word-vs-proof', 'inside-report', 'how-it-works', 'durable-design', 'cta-footer'];
   window.addEventListener('scroll', () => {
     const scrollPos = window.scrollY + 160;
     sectionIds.forEach(id => {
@@ -60,7 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const height = sec.offsetHeight;
         if (scrollPos >= top && scrollPos < top + height) {
           navItems.forEach(item => {
-            if (item.getAttribute('data-nav') === id) {
+            const dataNav = item.getAttribute('data-nav');
+            if (dataNav === id || (id === 'how-it-works' && dataNav === 'durable-design')) {
               if (!item.classList.contains('active')) {
                 navItems.forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
@@ -82,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const maxDash = 201; // for Hero
     // Map SOH (0-100) to dasharray: 100% = 201 100, 0% = 0 301
     const dashLength = (targetSoh / 100) * maxDash;
-    arc.style.strokeDasharray = ${dashLength} ;
+    arc.style.strokeDasharray = `${dashLength} 301`;
 
     // Counter ticker
     let start = 0;
@@ -91,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const progress = Math.min((now - startTime) / duration, 1);
       const ease = 1 - Math.pow(1 - progress, 3);
       const val = Math.round(targetSoh * ease);
-      numEl.innerHTML = ${val}<span class="pct">%</span>;
+      numEl.innerHTML = `${val}<span class="pct">%</span>`;
       if (progress < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -149,26 +150,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const cycles = this.dataset.cycles;
         const deg = this.dataset.deg;
 
-        // Simulated scanning feedback
-        scanStatusText.textContent = 'CONNECTING...';
+        // Report status feedback
+        scanStatusText.textContent = 'LOADING REPORT...';
         setTimeout(() => {
-          scanStatusText.textContent = 'SCANNING...';
-        }, 800);
+          scanStatusText.textContent = 'REAL REPORT';
+        }, 500);
 
         vName.textContent = model;
         vVin.textContent = vin;
-        vSoc.textContent = ${soc}%;
-        vRange.textContent = ${range} km;
-        vTemp.textContent = ${temp}°C;
+        vSoc.textContent = `${soc}%`;
+        vRange.textContent = `${range} km`;
+        vTemp.textContent = `${temp}°C`;
         vCycles.textContent = cycles;
-        vDeg.textContent = ${deg}% / year;
+        vDeg.textContent = `${deg}% / year`;
 
         vHealthTag.textContent = soh >= 94 ? 'Pristine' : (soh >= 90 ? 'Excellent' : 'Good');
         setRadialGauge('heroSohArc', 'heroSohDisplay', soh, 900);
 
         // Update Degradation Chart final point
         const badge = document.getElementById('chartCurrentBadge');
-        if (badge) badge.textContent = ${soh}%;
+        if (badge) badge.textContent = `${soh}%`;
       });
     });
   }
@@ -201,9 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const month = this.dataset.month;
       const val = this.dataset.val;
       if (chartTooltip) {
-        chartTooltip.textContent = ${month}: ;
-        chartTooltip.style.left = ${this.getAttribute('cx')}px;
-        chartTooltip.style.top = ${parseInt(this.getAttribute('cy')) - 26}px;
+        chartTooltip.textContent = `${month}: ${val}%`;
+        chartTooltip.style.left = `${this.getAttribute('cx')}px`;
+        chartTooltip.style.top = `${parseInt(this.getAttribute('cy')) - 26}px`;
         chartTooltip.classList.add('visible');
       }
     });
@@ -226,21 +227,21 @@ document.addEventListener('DOMContentLoaded', () => {
   if (sohSlider) {
     sohSlider.addEventListener('input', function() {
       const val = parseInt(this.value);
-      sliderValDisplay.textContent = ${val}%;
+      sliderValDisplay.textContent = `${val}%`;
       setRadialGauge('rptSohGaugeArc', 'rptSohNum', val, 300);
 
       // Calculate confidence band (+/- 4%)
       const low = Math.max(val - 4, 60);
       const high = Math.min(val + 4, 100);
-      confRangeText.textContent = ${low}% – %;
+      confRangeText.textContent = `${low}% – ${high}%`;
 
       // Visual slider bar position
       const leftPct = ((low - 60) / 40) * 100;
       const widthPct = ((high - low) / 40) * 100;
-      confFillBar.style.left = ${leftPct}%;
-      confFillBar.style.width = ${widthPct}%;
-      confMarkerStart.style.left = ${leftPct}%;
-      confMarkerEnd.style.left = ${leftPct + widthPct}%;
+      confFillBar.style.left = `${leftPct}%`;
+      confFillBar.style.width = `${widthPct}%`;
+      confMarkerStart.style.left = `${leftPct}%`;
+      confMarkerEnd.style.left = `${leftPct + widthPct}%`;
 
       // Update grade
       let grade = 'A+ • Excellent';
@@ -253,7 +254,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       rptGradeTag.textContent = tag;
       rptGradePill.textContent = grade;
-      warrantyLimitDesc.textContent = Shows approx.  (estimated  months) left until warranty threshold (70-75% SOH).;
+      warrantyLimitDesc.textContent = `Shows approx. ${kmLeft} (estimated ${Math.max(1, Math.round((val - 70) * 2.5))} months) left until warranty threshold (70-75% SOH).`;
+      
+      const warrantyChip = document.querySelector('#inside-report .tile-stat-chip');
+      if (warrantyChip) {
+        warrantyChip.textContent = `~${kmLeft} Left`;
+      }
     });
   }
 
@@ -268,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
       vsDiffBtn.classList.add('active');
       vsMatrix.querySelectorAll('.vs-row-item').forEach((item, idx) => {
         item.style.transition = 'all 0.3s ease';
-        item.style.transform = scale(1.03);
+        item.style.transform = 'scale(1.03)';
         item.style.backgroundColor = 'rgba(74, 222, 128, 0.08)';
       });
     });
@@ -339,12 +345,129 @@ document.addEventListener('DOMContentLoaded', () => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      card.style.background = adial-gradient(circle at px px, rgba(74, 222, 128, 0.12) 0%, rgba(14, 25, 16, 0.8) 60%);
+      card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(74, 222, 128, 0.12) 0%, rgba(14, 25, 16, 0.8) 60%)`;
     });
     card.addEventListener('mouseleave', () => {
-      card.style.background = '';
+      card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(74, 222, 128, 0.12) 0%, rgba(14, 25, 16, 0.8) 60%)`;
     });
   });
+
+  // --- 9. AUTHENTICATION & CONDITIONAL ROUTING ---------------
+  function isUserAuthenticated() {
+    try {
+      const loggedInFlag = localStorage.getItem('voltsentry_is_logged_in');
+      const userObj = localStorage.getItem('voltsentry_user');
+      const legacy = localStorage.getItem('isLoggedIn');
+      return loggedInFlag === 'true' || !!userObj || legacy === 'true';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function getDashboardUrl() {
+    if (window.location.port === '8080') {
+      return 'http://localhost:5173/dashboard';
+    }
+    return '/dashboard';
+  }
+
+  function getLoginUrl() {
+    return 'login.html?redirect=dashboard';
+  }
+
+  function handleDashboardClick(e) {
+    if (e) e.preventDefault();
+    if (isUserAuthenticated()) {
+      // User is already logged in or signed up -> directly open dashboard (shows upload photo first if not uploaded)
+      const targetUrl = getDashboardUrl();
+      if (window.top && window.top !== window) {
+        window.top.location.href = targetUrl;
+      } else {
+        window.location.href = targetUrl;
+      }
+    } else {
+      // User is not logged in / signed up -> show login page
+      const loginUrl = getLoginUrl();
+      if (window.top && window.top !== window) {
+        window.top.location.href = loginUrl;
+      } else {
+        window.location.href = loginUrl;
+      }
+    }
+  }
+
+  const navDashboardLink = document.getElementById('navDashboardLink');
+  if (navDashboardLink) {
+    navDashboardLink.addEventListener('click', handleDashboardClick);
+  }
+
+  const connectVehicleBtn = document.getElementById('connectVehicleHeroBtn');
+  if (connectVehicleBtn) {
+    connectVehicleBtn.addEventListener('click', handleDashboardClick);
+  }
+
+  const openDashboardActionBtn = document.getElementById('openDashboardActionBtn');
+  if (openDashboardActionBtn) {
+    openDashboardActionBtn.addEventListener('click', handleDashboardClick);
+  }
+
+  const howItWorksHeroBtn = document.getElementById('howItWorksHeroBtn');
+  if (howItWorksHeroBtn) {
+    howItWorksHeroBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetSec = document.getElementById('how-it-works') || document.getElementById('durable-design');
+      if (targetSec) {
+        targetSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  // Update Navbar Login / Account Profile state
+  const loginBtn = document.getElementById('loginBtn');
+  if (loginBtn) {
+    if (isUserAuthenticated()) {
+      let displayName = 'Driver';
+      try {
+        const u = JSON.parse(localStorage.getItem('voltsentry_user'));
+        if (u && u.name) displayName = u.name;
+        else if (u && u.email) displayName = u.email.split('@')[0];
+      } catch (err) {}
+
+      loginBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span class="user-display-name">${displayName}</span>
+        <span class="signout-badge" title="Click to Sign Out" style="margin-left: 6px; font-size: 0.72rem; padding: 2px 7px; background: rgba(239, 68, 68, 0.16); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 999px; color: #f87171; cursor: pointer;">Sign Out</span>
+      `;
+      loginBtn.title = "Logged in - click Sign Out to test logged-out state";
+
+      const signoutBadge = loginBtn.querySelector('.signout-badge');
+      if (signoutBadge) {
+        signoutBadge.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          localStorage.removeItem('voltsentry_is_logged_in');
+          localStorage.removeItem('voltsentry_user');
+          localStorage.removeItem('isLoggedIn');
+          window.location.reload();
+        });
+      }
+
+      loginBtn.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('signout-badge')) {
+          e.preventDefault();
+          const targetUrl = getDashboardUrl();
+          if (window.top && window.top !== window) {
+            window.top.location.href = targetUrl;
+          } else {
+            window.location.href = targetUrl;
+          }
+        }
+      });
+    }
+  }
 
   console.log('%cVoltSentry Motion Edition ? Ready', 'color: #4ade80; font-size: 15px; font-weight: bold;');
 });

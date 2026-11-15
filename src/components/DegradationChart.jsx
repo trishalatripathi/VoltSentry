@@ -10,20 +10,16 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function DegradationChart() {
+function DegradationChart({ batteryData: propData }) {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     try {
       const savedData = localStorage.getItem("batteryData");
+      const batteryData = propData || (savedData ? JSON.parse(savedData) : null);
 
-      if (!savedData) {
-        return;
-      }
-
-      const batteryData = JSON.parse(savedData);
-
-      if (!batteryData.rawData) {
+      if (!batteryData || !batteryData.rawData) {
+        setChartData([]);
         return;
       }
 
@@ -65,7 +61,7 @@ function DegradationChart() {
         error
       );
     }
-  }, []);
+  }, [propData]);
 
   return (
     <div className="degradation-chart glass-panel">

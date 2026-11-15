@@ -1,25 +1,32 @@
 import { useEffect, useState } from "react";
 
-function SafetyRisk() {
-  const [batteryData, setBatteryData] = useState(null);
+function SafetyRisk({ batteryData: propData }) {
+  const [batteryData, setBatteryData] = useState(propData || null);
 
   useEffect(() => {
+    if (propData !== undefined) {
+      setBatteryData(propData);
+      return;
+    }
     try {
       const savedData = localStorage.getItem("batteryData");
-
       if (savedData) {
         setBatteryData(JSON.parse(savedData));
+      } else {
+        setBatteryData(null);
       }
     } catch (error) {
       console.error("Error loading safety data:", error);
     }
-  }, []);
+  }, [propData]);
 
-  const data = batteryData || {
-    thermalRisk: "Low",
-    electricalRisk: "Low",
-    chargingRisk: "Low",
-    cellImbalanceRisk: "Low",
+  const hasData = !!batteryData;
+
+  const data = hasData ? batteryData : {
+    thermalRisk: "0",
+    electricalRisk: "0",
+    chargingRisk: "0",
+    cellImbalanceRisk: "0",
   };
 
   function getRiskClass(risk) {
@@ -31,7 +38,11 @@ function SafetyRisk() {
       return "risk-medium";
     }
 
-    return "risk-low";
+    if (risk === "Low") {
+      return "risk-low";
+    }
+
+    return "risk-none";
   }
 
   return (

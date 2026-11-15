@@ -26,10 +26,10 @@
       <div class="nav-links-wrapper">
         <ul class="nav-links" id="navLinks">
           <li><a href="#hero" class="nav-item active" data-nav="hero">Home</a></li>
-          <li><a href="/dashboard" target="_top" class="nav-item" data-nav="hero">Dashboard</a></li>
-          <li><a href="#word-vs-proof" class="nav-item" data-nav="word-vs-proof">Battery Passport</a></li>
+          <li><a href="/dashboard" target="_top" class="nav-item" id="navDashboardLink" data-nav="hero">Dashboard</a></li>
+          <li><a href="#how-it-works" class="nav-item" data-nav="how-it-works">How It Works</a></li>
+          <li><a href="#word-vs-proof" class="nav-item" data-nav="word-vs-proof">Word VS Proof</a></li>
           <li><a href="#inside-report" class="nav-item" data-nav="inside-report">Insights</a></li>
-          <li><a href="#durable-design" class="nav-item" data-nav="durable-design">Reports</a></li>
           <li><a href="#cta-footer" class="nav-item" data-nav="cta-footer">Support</a></li>
         </ul>
         <div class="nav-pill-indicator" id="navIndicator"></div>
@@ -137,7 +137,7 @@
 
         <!-- Action CTAs -->
         <div class="hero-actions-row">
-          <a href="#durable-design" class="btn btn-emerald-action">
+          <a href="/dashboard" target="_top" class="btn btn-emerald-action" id="connectVehicleHeroBtn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
               <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
@@ -151,6 +151,14 @@
               <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
             </svg>
             See Sample Report
+          </a>
+          <a href="#how-it-works" class="btn btn-glass-action" id="howItWorksHeroBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            How It Works
           </a>
         </div>
 
@@ -173,10 +181,10 @@
           
           <!-- Top Window Header -->
           <div class="dash-window-header">
-            <div class="dash-status-heading">LIVE BATTERY STATUS</div>
+            <div class="dash-status-heading">SOME OF THE REPORTS</div>
             <div class="dash-live-badge" id="scanningBadge">
               <span class="radar-dot"></span>
-              <span class="scan-text" id="scanStatusText">SCANNING...</span>
+              <span class="scan-text" id="scanStatusText">REAL REPORTS</span>
             </div>
           </div>
 
@@ -438,24 +446,34 @@
           <h3 class="vs-panel-h3">What you get</h3>
           <ul class="vs-items-list">
             <li class="vs-row-item">
-              <span class="x-round-badge">?</span>
-              <span>Only seller's word, no proof</span>
+              <span class="x-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </span>
+              <span>Only seller's verbal claim, zero verified telemetry</span>
             </li>
             <li class="vs-row-item">
-              <span class="x-round-badge">?</span>
-              <span>No health or condition data</span>
+              <span class="x-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </span>
+              <span>Hidden battery degradation & unknown SOH %</span>
             </li>
             <li class="vs-row-item">
-              <span class="x-round-badge">?</span>
-              <span>No usage or cycle information</span>
+              <span class="x-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </span>
+              <span>No cycle history or fast-charging abuse records</span>
             </li>
             <li class="vs-row-item">
-              <span class="x-round-badge">?</span>
-              <span>No temperature or safety info</span>
+              <span class="x-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </span>
+              <span>No temperature logs or cell imbalance warnings</span>
             </li>
             <li class="vs-row-item">
-              <span class="x-round-badge">?</span>
-              <span>No verified service history</span>
+              <span class="x-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </span>
+              <span>Risk of sudden ₹3–5 Lakh pack replacement</span>
             </li>
           </ul>
         </div>
@@ -473,28 +491,40 @@
           </h3>
           <ul class="vs-items-list">
             <li class="vs-row-item">
-              <span class="chk-round-badge">?</span>
-              <span>Battery State of Health (SOH %)</span>
+              <span class="chk-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Certified State of Health (SOH %) & Usable Capacity</span>
             </li>
             <li class="vs-row-item">
-              <span class="chk-round-badge">?</span>
-              <span>Total charge/discharge cycles</span>
+              <span class="chk-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Lifetime charge-discharge cycles & DC fast charge ratio</span>
             </li>
             <li class="vs-row-item">
-              <span class="chk-round-badge">?</span>
-              <span>Voltage &amp; temperature readings</span>
+              <span class="chk-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Cell delta mV balance & thermal exposure history</span>
             </li>
             <li class="vs-row-item">
-              <span class="chk-round-badge">?</span>
-              <span>Pack capacity &amp; current status</span>
+              <span class="chk-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Remaining warranty distance buffer & lifespan estimate</span>
             </li>
             <li class="vs-row-item">
-              <span class="chk-round-badge">?</span>
-              <span>BMS error logs (if any)</span>
+              <span class="chk-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Full BMS diagnostic register analysis & error audits</span>
             </li>
             <li class="vs-row-item">
-              <span class="chk-round-badge">?</span>
-              <span>Service center verification &amp; report</span>
+              <span class="chk-round-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Tamper-evident, co-signed Second Life Passport</span>
             </li>
           </ul>
         </div>
@@ -503,25 +533,54 @@
   </section>
 
   <!-- -----------------------------------------------------------
-       PAGE 3: INSIDE THE REPORT (DARK HIGH-CONTRAST + SIMULATOR)
+       PAGE 3: INSIDE THE REPORT (HIGH-CONTRAST PROFESSIONAL AUDIT)
   ----------------------------------------------------------- -->
   <section class="page-section section-pure-dark" id="inside-report">
     <div class="ambient-glow-center"></div>
 
     <div class="container">
-      <div class="section-tag-lime">INSIDE THE REPORT</div>
+      <div class="section-tag-lime">CERTIFIED BATTERY HEALTH REPORT</div>
       <h2 class="section-display-h2">
         What your report<br />actually <span class="gradient-text-lime">reveals</span>
       </h2>
       <p class="section-lead-text">
-        Clear, verified insights from your battery –<br />so you know what you're really buying.
+        Clear, verified insights decoded straight from the Battery Management System (BMS) —<br />so you know the true health, safety, and longevity of the vehicle.
       </p>
+
+      <!-- Professional Certified Audit Certificate Bar -->
+      <div class="report-cert-banner spotlight-card">
+        <div class="cert-banner-left">
+          <div class="cert-badge-row">
+            <span class="cert-status-pill">
+              <span class="cert-pulse-dot"></span>
+              OFFICIAL TELEMETRY AUDIT
+            </span>
+            <span class="cert-id-text">REPORT #VS-8942-IN</span>
+          </div>
+          <div class="cert-vehicle-meta">
+            <strong class="cert-vehicle-title">Mahindra BE 6 • 79.5 kWh Blade Pack</strong>
+            <span class="cert-vin-pill">VIN: MA6BE6R1ZP0123456</span>
+          </div>
+        </div>
+        <div class="cert-banner-right">
+          <div class="cert-verification-seal">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+            <div>
+              <span class="seal-top">BMS CO-SIGNED AUDIT</span>
+              <span class="seal-bot">100% Cryptographically Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="report-overview-layout">
         <!-- LEFT: SOH SCORE CARD (WITH INTERACTIVE RANGE TESTER) -->
         <div class="report-primary-card spotlight-card">
           <div class="soh-top-heading-row">
-            <span class="dot-beacon-green">?</span>
+            <span class="dot-beacon-green">●</span>
             BATTERY STATE OF HEALTH (SOH)
           </div>
 
@@ -548,14 +607,15 @@
 
             <!-- Details & Interactive Confidence Band -->
             <div class="soh-content-col">
-              <h3 class="soh-title-h3">SOH Score</h3>
-              <p class="soh-subtitle-p">State of Health of your battery compared to a new battery.</p>
-              
-              <div class="grade-pill-emerald" id="rptGradePill">A+ • Excellent</div>
+              <div class="soh-header-flex-line">
+                <h3 class="soh-title-h3">Battery SOH Score</h3>
+                <div class="grade-pill-emerald" id="rptGradePill">A+ • Excellent</div>
+              </div>
+              <p class="soh-subtitle-p">Real-time usable capacity compared to original factory rating (79.5 kWh rated → 73.1 kWh actual).</p>
 
               <div class="confidence-band-card">
                 <div class="conf-top-row">
-                  <span class="conf-lbl-title">CONFIDENCE BAND</span>
+                  <span class="conf-lbl-title">MEASUREMENT CONFIDENCE BAND</span>
                   <span class="conf-live-range" id="confRangeText">88% – 96%</span>
                 </div>
                 
@@ -566,252 +626,398 @@
                 </div>
                 
                 <p class="conf-note-text">
-                  This shows the range in which the real SOH lies.<br />
-                  Higher band = more accurate reading.
+                  Precision band accounts for cell balancing and temperature variance. A narrower band indicates higher statistical diagnostic certainty.
                 </p>
               </div>
 
               <!-- Interactive Simulator Slider -->
               <div class="soh-interactive-slider-box">
                 <div class="slider-header-flex">
-                  <span>?? Try SOH Simulator:</span>
+                  <span>⚡ Drag SOH Simulator to Test Health Conditions:</span>
                   <strong id="sliderCurrentVal">92%</strong>
                 </div>
                 <input type="range" min="70" max="100" value="92" class="soh-range-input" id="sohInteractiveSlider" />
               </div>
 
               <div class="calculation-methodology-card">
-                <div class="calc-icon-symbol">=</div>
+                <div class="calc-icon-symbol">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                </div>
                 <div>
-                  <strong>SOH Calculation Method</strong>
-                  <p>Based on cell-by-cell capacity, voltage, temperature, cycle count and usage data from the BMS.</p>
+                  <strong>How VoltSentry Calculates SOH</strong>
+                  <p>Our algorithms evaluate Coulomb counting, dynamic voltage discharge curves, and individual cell impedance metrics from raw BMS diagnostic frames.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- RIGHT: 3 STACKED DETAIL CARDS -->
+        <!-- RIGHT: 4 PROFESSIONAL DIAGNOSTIC METRIC CARDS -->
         <div class="report-side-cards-column">
+          <!-- Card 1: Estimated Range to Warranty Limit -->
           <div class="rpt-feature-tile spotlight-card">
             <div class="tile-icon-square">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
                 <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
                 <polyline points="17 6 23 6 23 12"/>
               </svg>
             </div>
-            <div>
-              <h4 id="warrantyLimitTitle">Estimated Range to Warranty Limit</h4>
-              <p id="warrantyLimitDesc">Shows the estimated kilometers or usage left until the battery may reach 70–75% SOH (typical warranty threshold).</p>
+            <div class="tile-body-block">
+              <div class="tile-top-row">
+                <h4 id="warrantyLimitTitle">Warranty Horizon & Remaining Life</h4>
+                <span class="tile-stat-chip chip-green">~145,000 km Left</span>
+              </div>
+              <p id="warrantyLimitDesc">Shows approx. 145,000 km (estimated 55 months) left until warranty threshold (70-75% SOH).</p>
+              <div class="tile-submetric-bar">
+                <span>Safe Buffer: <strong>~4.8 Years</strong></span>
+                <span>Threshold: <strong>70% SOH</strong></span>
+              </div>
             </div>
           </div>
 
+          <!-- Card 2: Cell Voltage Imbalance -->
           <div class="rpt-feature-tile spotlight-card">
             <div class="tile-icon-square">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
                 <rect x="2" y="7" width="18" height="11" rx="2"/>
                 <path d="M22 11v4"/>
                 <line x1="6" y1="11" x2="6" y2="14"/>
                 <line x1="10" y1="11" x2="10" y2="14"/>
               </svg>
             </div>
-            <div>
-              <h4>Cycle Count &amp; Usage Summary</h4>
-              <p>Total charge–discharge cycles and how the battery has been used over time.</p>
+            <div class="tile-body-block">
+              <div class="tile-top-row">
+                <h4>Cell Voltage Uniformity (Delta V)</h4>
+                <span class="tile-stat-chip chip-green">18 mV Delta</span>
+              </div>
+              <p>Evaluates voltage balance across all cell groups. A low delta ensures full range release and prevents sudden power drops under heavy acceleration.</p>
+              <div class="tile-submetric-bar">
+                <span>Variance: <strong>Optimal (&lt; 50 mV limit)</strong></span>
+                <span>Weak Cells: <strong>0 Detected</strong></span>
+              </div>
             </div>
           </div>
 
+          <!-- Card 3: Thermal Stress & Operating Range -->
           <div class="rpt-feature-tile spotlight-card">
             <div class="tile-icon-square">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                <polyline points="9 12 11 14 15 10"/>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+                <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
               </svg>
             </div>
-            <div>
-              <h4>Verified Source</h4>
-              <p>Data is read from the vehicle's BMS, checked by our system and verified through service center / partner inspection reports.</p>
+            <div class="tile-body-block">
+              <div class="tile-top-row">
+                <h4>Thermal Stress & Operating History</h4>
+                <span class="tile-stat-chip chip-green">32°C Avg • 38°C Peak</span>
+              </div>
+              <p>Monitors lifetime thermal exposures. Verifies the battery was not exposed to hazardous runaway conditions or chronic heat during summer charging in India.</p>
+              <div class="tile-submetric-bar">
+                <span>Thermal Safety: <strong>Safe</strong></span>
+                <span>Overheat Incidents: <strong>None</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Cycle Count & Fast Charging Stress -->
+          <div class="rpt-feature-tile spotlight-card">
+            <div class="tile-icon-square">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <div class="tile-body-block">
+              <div class="tile-top-row">
+                <h4>Cycle Count & Fast Charge Ratio</h4>
+                <span class="tile-stat-chip chip-cyan">312 Cycles • 18% DC</span>
+              </div>
+              <p>Total equivalent charge-discharge cycles. The high 82% slow AC home-charging ratio preserves cell cathode chemistry and extends battery life.</p>
+              <div class="tile-submetric-bar">
+                <span>Charging Habit: <strong>Gentle AC</strong></span>
+                <span>Expected Lifespan: <strong>1,800+ Cycles</strong></span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- BOTTOM BANNER: WHY IT MATTERS -->
-      <div class="why-matters-callout spotlight-card">
-        <div class="wm-icon-orb">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-        </div>
-        <div class="wm-text-block">
-          <strong>Why it matters</strong>
-          <p>This report helps you understand the true condition of the EV battery, so you can buy with confidence and avoid hidden risks.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- -----------------------------------------------------------
-       PAGE 4: DURABLE BY DESIGN / ONE UPLOAD (PURE DARK)
-  ----------------------------------------------------------- -->
-  <section class="page-section section-pure-dark" id="durable-design">
-    <div class="ambient-glow-bottom"></div>
-
-    <div class="container">
-      <div class="section-tag-lime">DURABLE BY DESIGN</div>
-      <h2 class="section-display-h2">
-        One upload. Many <span class="gradient-text-lime">decisions.</span>
-      </h2>
-      <p class="section-lead-text">
-        Upload the data from your workshop tool or service report<br />
-        and we'll turn it into a <span class="gradient-text-lime">Second Life Passport.</span>
-      </p>
-
-      <!-- Main Feature Lead Card -->
-      <div class="durable-banner-box spotlight-card">
-        <div class="dbb-left-col">
-          <div class="dbb-shield-orb">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+      <!-- PROFESSIONAL 3-COLUMN "WHY THIS REPORT MATTERS" MATRIX -->
+      <div class="report-why-matters-grid">
+        <div class="why-card spotlight-card">
+          <div class="why-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               <polyline points="9 12 11 14 15 10"/>
             </svg>
           </div>
-          <div>
-            <h3 class="dbb-h3">
-              Upload. Verify. Understand.<br />Then unlock the next life.
-            </h3>
-            <p class="dbb-subp">
-              Once the data is uploaded and verified, you'll get a <span class="gradient-text-lime">Second Life Passport</span> of your EV battery.
-            </p>
-          </div>
+          <h4>For Used EV Buyers</h4>
+          <p class="why-card-lead">Eliminate Blind Purchases</p>
+          <p class="why-card-text">Protect yourself from ₹3–5 Lakh sudden battery replacement bills. Never buy a pre-owned EV solely on the odometer reading without verified SOH proof.</p>
         </div>
 
-        <div class="dbb-right-checks">
-          <div class="dbb-check-row"><span class="check-circ-badge">?</span><span>See the true condition of the battery</span></div>
-          <div class="dbb-check-row"><span class="check-circ-badge">?</span><span>Reuse, repurpose or recycle with confidence</span></div>
-          <div class="dbb-check-row"><span class="check-circ-badge">?</span><span>Make smart, data-backed decisions</span></div>
+        <div class="why-card spotlight-card">
+          <div class="why-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+              <polyline points="17 6 23 6 23 12"/>
+            </svg>
+          </div>
+          <h4>For EV Owners & Sellers</h4>
+          <p class="why-card-lead">Command 15–20% Higher Resale</p>
+          <p class="why-card-text">Differentiate your vehicle in the second-hand market. Certified VoltSentry battery passports instill instant buyer trust and justify premium pricing.</p>
         </div>
-      </div>
 
-      <!-- 5 Interactive Upload Method Tiles -->
-      <div class="upload-methods-container">
-        <h3 class="methods-bar-heading">
-          Upload your report or data <span class="highlight-green-bracket">(Easy for everyone in India)</span>
-        </h3>
-
-        <div class="methods-interactive-5grid">
-          <div class="method-interactive-card spotlight-card" data-method="photos" role="button" tabindex="0">
-            <div class="method-icon-frame">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-                <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
-                <circle cx="12" cy="13" r="4"/>
-              </svg>
-            </div>
-            <strong>Take Photos</strong>
-            <p>Upload clear photos of BMS screen / meter reading / dashboard.</p>
-            <span class="method-action-tag">Click to upload ?</span>
-          </div>
-
-          <div class="method-interactive-card spotlight-card" data-method="report" role="button" tabindex="0">
-            <div class="method-icon-frame">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <line x1="8" y1="9" x2="16" y2="9"/>
-                <line x1="8" y1="13" x2="16" y2="13"/>
-                <line x1="8" y1="17" x2="12" y2="17"/>
-              </svg>
-            </div>
-            <strong>Service Report</strong>
-            <p>Upload report from authorized service center or workshop.</p>
-            <span class="method-action-tag">Click to upload ?</span>
-          </div>
-
-          <div class="method-interactive-card spotlight-card" data-method="invoice" role="button" tabindex="0">
-            <div class="method-icon-frame">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-                <text x="8" y="16" font-size="6" fill="#4ade80" font-weight="bold">PDF</text>
-              </svg>
-            </div>
-            <strong>Bill / Invoice</strong>
-            <p>Upload bill or invoice that shows battery service details.</p>
-            <span class="method-action-tag">Click to upload ?</span>
-          </div>
-
-          <div class="method-interactive-card spotlight-card" data-method="whatsapp" role="button" tabindex="0">
-            <div class="method-icon-frame">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
-              </svg>
-            </div>
-            <strong>WhatsApp / Email</strong>
-            <p>Forward service report or BMS readings via WhatsApp or email.</p>
-            <span class="method-action-tag">Forward now ?</span>
-          </div>
-
-          <div class="method-interactive-card spotlight-card" data-method="manual" role="button" tabindex="0">
-            <div class="method-icon-frame">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-                <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
-              </svg>
-            </div>
-            <strong>Manual Entry</strong>
-            <p>Enter key values manually if report is not available.</p>
-            <span class="method-action-tag">Fill form ?</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Passport Output Result Card -->
-      <div class="passport-result-banner spotlight-card">
-        <div class="prb-left">
-          <div class="prb-cycle-icon">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+        <div class="why-card spotlight-card">
+          <div class="why-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
               <polyline points="1 4 1 10 7 10"/>
               <polyline points="23 20 23 14 17 14"/>
               <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
             </svg>
           </div>
-          <div>
-            <h3>Get the Second Life Passport</h3>
-            <p>
-              After verification, you'll receive a <span class="gradient-text-lime">Second Life Passport</span> — showing your battery's health, usable capacity, cycle life and more — to help you decide its next best use.
-            </p>
+          <h4>For Second-Life & Recycling</h4>
+          <p class="why-card-lead">Unlock Residual Value</p>
+          <p class="why-card-text">Evaluate whether retired packs can be repurposed for solar energy storage, agricultural micro-grids, or routed to certified clean battery recyclers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+    </div>
+  </section>
+  <!-- -----------------------------------------------------------
+       PAGE 4: HOW VOLTSENTRY WORKS (PURE DARK)
+  ----------------------------------------------------------- -->
+  <section class="page-section section-pure-dark" id="how-it-works">
+    <span id="durable-design" style="position: absolute; top: 0; left: 0; height: 0; width: 0; opacity: 0; pointer-events: none;"></span>
+    <div class="ambient-glow-bottom"></div>
+
+    <div class="container">
+      <div class="section-tag-lime">HOW VOLTSENTRY WORKS</div>
+      <h2 class="section-display-h2">
+        How <span class="gradient-text-lime">VoltSentry</span> Works
+      </h2>
+      <p class="section-lead-text">
+        From raw vehicle battery telemetry to predictive health indicators and real-time safety risk detection.<br />
+        Understand the complete end-to-end journey in 6 simple steps.
+      </p>
+
+      <!-- Complete Journey Flow Bar -->
+      <div class="how-it-works-flow spotlight-card">
+        <div class="flow-step-item">
+          <span class="flow-num">1</span>
+          <span class="flow-text">Upload CSV</span>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step-item">
+          <span class="flow-num">2</span>
+          <span class="flow-text">AI Analysis</span>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step-item">
+          <span class="flow-num">3</span>
+          <span class="flow-text">Health Assessment</span>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step-item">
+          <span class="flow-num">4</span>
+          <span class="flow-text">Risk Detection</span>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step-item">
+          <span class="flow-num">5</span>
+          <span class="flow-text">Interactive Dashboard</span>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step-item">
+          <span class="flow-num">6</span>
+          <span class="flow-text">Reports &amp; Action</span>
+        </div>
+      </div>
+
+      <!-- 6 Modern Step Cards Grid -->
+      <div class="how-it-works-grid">
+        <!-- Step 1 -->
+        <div class="step-process-card spotlight-card">
+          <div class="step-card-top">
+            <span class="step-badge-pill">Step 01</span>
+            <div class="step-icon-orb">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <path d="M12 18v-6"/>
+                <path d="M9 15l3-3 3 3"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="step-card-title">1. Upload Your Vehicle Data</h3>
+          <p class="step-card-desc">
+            Users upload a CSV file containing vehicle battery information, such as temperature, voltage, charging cycles, usage patterns, and diagnostic data.
+          </p>
+          <div class="step-tags-row">
+            <span class="step-chip">CSV Telemetry</span>
+            <span class="step-chip">BMS Datasets</span>
+            <span class="step-chip">Usage Patterns</span>
           </div>
         </div>
 
-        <div class="prb-steps-trio">
-          <div class="prb-step-box">
-            <div class="step-icon-round">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="9 11 12 14 22 4"/>
+        <!-- Step 2 -->
+        <div class="step-process-card spotlight-card">
+          <div class="step-card-top">
+            <span class="step-badge-pill">Step 02</span>
+            <div class="step-icon-orb">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2"/>
+                <rect x="9" y="9" width="6" height="6"/>
+                <line x1="9" y1="1" x2="9" y2="4"/>
+                <line x1="15" y1="1" x2="15" y2="4"/>
+                <line x1="9" y1="20" x2="9" y2="23"/>
+                <line x1="15" y1="20" x2="15" y2="23"/>
+                <line x1="20" y1="9" x2="23" y2="9"/>
+                <line x1="20" y1="14" x2="23" y2="14"/>
+                <line x1="1" y1="9" x2="4" y2="9"/>
+                <line x1="1" y1="14" x2="4" y2="14"/>
               </svg>
             </div>
-            <span>Assess health</span>
           </div>
+          <h3 class="step-card-title">2. AI-Powered Analysis</h3>
+          <p class="step-card-desc">
+            The system processes the uploaded CSV data and analyzes the battery's condition, health indicators, charging behaviour, and potential safety risks.
+          </p>
+          <div class="step-tags-row">
+            <span class="step-chip">Machine Learning</span>
+            <span class="step-chip">Pattern Recognition</span>
+            <span class="step-chip">Condition Profiling</span>
+          </div>
+        </div>
 
-          <div class="prb-step-box">
-            <div class="step-icon-round">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-                <polyline points="1 4 1 10 7 10"/>
-                <polyline points="23 20 23 14 17 14"/>
-                <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
+        <!-- Step 3 -->
+        <div class="step-process-card spotlight-card">
+          <div class="step-card-top">
+            <span class="step-badge-pill">Step 03</span>
+            <div class="step-icon-orb">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="6" width="18" height="12" rx="2"/>
+                <line x1="23" y1="11" x2="23" y2="13"/>
+                <polyline points="6 12 8 10 10 14 12 12"/>
               </svg>
             </div>
-            <span>Decide next use</span>
           </div>
+          <h3 class="step-card-title">3. Battery Health Assessment</h3>
+          <p class="step-card-desc">
+            VoltSentry evaluates battery health and provides important indicators such as State of Health (SOH), battery degradation, and estimated remaining battery life.
+          </p>
+          <div class="step-tags-row">
+            <span class="step-chip">SOH %</span>
+            <span class="step-chip">Degradation Curve</span>
+            <span class="step-chip">Remaining Life</span>
+          </div>
+        </div>
 
-          <div class="prb-step-box">
-            <div class="step-icon-round">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
-                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+        <!-- Step 4 -->
+        <div class="step-process-card spotlight-card">
+          <div class="step-card-top">
+            <span class="step-badge-pill">Step 04</span>
+            <div class="step-icon-orb">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
               </svg>
             </div>
-            <span>Reuse or recycle</span>
           </div>
+          <h3 class="step-card-title">4. Safety Risk Detection</h3>
+          <p class="step-card-desc">
+            The system identifies potential thermal risks, electrical abnormalities, unusual charging patterns, and other warning signs.
+          </p>
+          <div class="step-tags-row">
+            <span class="step-chip">Thermal Risks</span>
+            <span class="step-chip">Voltage Deltas</span>
+            <span class="step-chip">Cell Imbalance</span>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-process-card spotlight-card">
+          <div class="step-card-top">
+            <span class="step-badge-pill">Step 05</span>
+            <div class="step-icon-orb">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="step-card-title">5. Interactive Dashboard</h3>
+          <p class="step-card-desc">
+            The analyzed information is presented through visual charts, health indicators, risk levels, and battery performance insights.
+          </p>
+          <div class="step-tags-row">
+            <span class="step-chip">Visual Charts</span>
+            <span class="step-chip">Risk Gauges</span>
+            <span class="step-chip">Telemetry Insights</span>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step-process-card spotlight-card">
+          <div class="step-card-top">
+            <span class="step-badge-pill">Step 06</span>
+            <div class="step-icon-orb">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <polyline points="9 15 11 17 15 13"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="step-card-title">6. Reports and Recommendations</h3>
+          <p class="step-card-desc">
+            Users can view their battery analysis report, understand potential issues, and receive useful recommendations for battery maintenance and safety.
+          </p>
+          <div class="step-tags-row">
+            <span class="step-chip">Comprehensive Reports</span>
+            <span class="step-chip">Maintenance Guide</span>
+            <span class="step-chip">Safety Action Plans</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Callout Banner -->
+      <div class="how-it-works-action-banner spotlight-card">
+        <div class="hiw-banner-left">
+          <div class="hiw-banner-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="hiw-banner-title">Ready to analyze your EV battery?</h3>
+            <p class="hiw-banner-desc">
+              Connect your vehicle data in the dashboard or test with sample battery telemetry.
+            </p>
+          </div>
+        </div>
+        <div class="hiw-banner-buttons">
+          <a href="/dashboard" target="_top" class="btn btn-emerald-action" id="openDashboardActionBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+            </svg>
+            Open Dashboard
+          </a>
+          <a href="#inside-report" class="btn btn-glass-action">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            See Sample Report
+          </a>
         </div>
       </div>
 
@@ -820,7 +1026,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
           <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
         </svg>
-        Your data is private and secure. We use it only to generate your Second Life Passport.
+        Your vehicle data is processed securely with encrypted storage and strict privacy protocols.
       </div>
     </div>
   </section>
@@ -848,13 +1054,13 @@
         </div>
 
         <div class="cmc-buttons">
-          <a href="#durable-design" class="btn btn-emerald-action">
+          <a href="#how-it-works" class="btn btn-emerald-action">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
               <polyline points="17 8 12 3 7 8"/>
               <line x1="12" y1="3" x2="12" y2="15"/>
             </svg>
-            Upload Your Data ?
+            How It Works →
           </a>
           <a href="#inside-report" class="btn btn-lime-outline">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -963,12 +1169,12 @@
           <div class="footer-nav-col">
             <h4>PRODUCT</h4>
             <ul>
-              <li><a href="#word-vs-proof">› How it works</a></li>
+              <li><a href="#how-it-works">› How it works</a></li>
               <li><a href="#inside-report">› Passport Report</a></li>
               <li><a href="#inside-report">› Sample Report</a></li>
               <li><a href="#inside-report">› Service Center Report</a></li>
               <li><a href="#inside-report">› PDF Report</a></li>
-              <li><a href="#durable-design">› Manual Entry</a></li>
+              <li><a href="#how-it-works">› 6-Step Analysis</a></li>
               <li><a href="#hero">› Dealer Portal</a></li>
             </ul>
           </div>

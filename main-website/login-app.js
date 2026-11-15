@@ -824,6 +824,16 @@ document.addEventListener('DOMContentLoaded', () => {
     isHovered = false;
 
     // 1. Button changes state
+    const nameVal = (document.getElementById('fullNameInput')?.value || '').trim();
+    const username = (document.getElementById('usernameInput')?.value || '').trim() || 'driver@voltsentry.com';
+    const displayName = nameVal || (username.includes('@') ? username.split('@')[0] : username);
+    localStorage.setItem('voltsentry_is_logged_in', 'true');
+    localStorage.setItem('voltsentry_user', JSON.stringify({
+      email: username,
+      name: displayName,
+      loggedInAt: new Date().toISOString()
+    }));
+
     const btnText = signInBtn ? signInBtn.querySelector('.btn-text') : null;
     if (btnText) btnText.textContent = "Verifying battery...";
     if (signInBtn) signInBtn.style.pointerEvents = 'none';
@@ -917,24 +927,189 @@ document.addEventListener('DOMContentLoaded', () => {
         backgroundColor: '#040704',
         duration: 0.5,
         onComplete: () => {
-          window.location.href = 'index.html';
+          const params = new URLSearchParams(window.location.search);
+          const redirect = params.get('redirect');
+          let dest = '/dashboard';
+          if (window.location.port === '8080') {
+            dest = 'http://localhost:5173/dashboard';
+          }
+          if (redirect === 'home' || redirect === 'index.html') {
+            dest = 'index.html';
+          }
+          if (window.top && window.top !== window) {
+            window.top.location.href = dest;
+          } else {
+            window.location.href = dest;
+          }
         }
       }, "-=0.2");
 
     } else {
       setTimeout(() => {
-        window.location.href = 'index.html';
+        let dest = '/dashboard';
+        if (window.location.port === '8080') {
+          dest = 'http://localhost:5173/dashboard';
+        }
+        if (window.top && window.top !== window) {
+          window.top.location.href = dest;
+        } else {
+          window.location.href = dest;
+        }
       }, 2000);
     }
   }
 
-  // Intercept form submission
+  // Auth Mode Tabs & Dynamic Sign Up Fields
+  const tabSignIn = document.getElementById('tabSignIn');
+  const tabSignUp = document.getElementById('tabSignUp');
+  const emailInput = document.getElementById('usernameInput');
+  const nameGroup = document.getElementById('nameGroup');
+  const fullNameInput = document.getElementById('fullNameInput');
+  const welcomeText = document.querySelector('.welcome-text');
+  const cardTitle = document.querySelector('.card-title');
+  const cardSubtitle = document.querySelector('.card-subtitle');
+  const btnText = signInBtn ? signInBtn.querySelector('.btn-text') : null;
+  const cardFooterSpan = document.querySelector('.card-footer span');
+  const createLink = document.querySelector('.create-link');
+  let isSignupMode = false;
+
+  function checkAndShowNameField() {
+    if (!isSignupMode) {
+      if (nameGroup) nameGroup.style.display = 'none';
+      return;
+    }
+    const hasEmail = emailInput && emailInput.value.trim().length > 0;
+    const hasPassword = passwordInput && passwordInput.value.length > 0;
+
+    // In signup mode, after entering email and password, ask for name in the same section
+    if (hasEmail && hasPassword) {
+      if (nameGroup && nameGroup.style.display !== 'block') {
+        nameGroup.style.display = 'block';
+        nameGroup.classList.add('animate-reveal');
+        if (fullNameInput && document.activeElement === passwordInput) {
+          // Keep smooth focus transition
+        }
+      }
+    }
+  }
+
+  function setAuthMode(signup) {
+    isSignupMode = signup;
+    if (tabSignIn && tabSignUp) {
+      tabSignIn.classList.toggle('active', !signup);
+      tabSignUp.classList.toggle('active', signup);
+    }
+
+    if (signup) {
+      if (welcomeText) welcomeText.textContent = 'Get started with VoltSentry';
+      if (cardTitle) cardTitle.textContent = 'Create Your Account';
+      if (cardSubtitle) {
+        cardSubtitle.textContent = 'Enter email & password to sign up';
+        cardSubtitle.style.color = '';
+      }
+      if (btnText) btnText.textContent = 'Create Account';
+      if (cardFooterSpan) {
+        cardFooterSpan.innerHTML = `Already have an account? <a href="#" class="create-link">Sign In</a>`;
+        const newLink = cardFooterSpan.querySelector('.create-link');
+        if (newLink) newLink.addEventListener('click', (e) => { e.preventDefault(); setAuthMode(false); });
+      }
+      checkAndShowNameField();
+    } else {
+      if (welcomeText) welcomeText.textContent = 'Welcome back';
+      if (cardTitle) cardTitle.textContent = 'Login to VoltSentry';
+      if (cardSubtitle) {
+        cardSubtitle.textContent = 'Access your battery intelligence dashboard';
+        cardSubtitle.style.color = '';
+      }
+      if (btnText) btnText.textContent = 'Sign In';
+      if (nameGroup) nameGroup.style.display = 'none';
+      if (cardFooterSpan) {
+        cardFooterSpan.innerHTML = `Don't have an account? <a href="#" class="create-link">Create Account</a>`;
+        const newLink = cardFooterSpan.querySelector('.create-link');
+        if (newLink) newLink.addEventListener('click', (e) => { e.preventDefault(); setAuthMode(true); });
+      }
+    }
+  }
+
+  if (tabSignIn) tabSignIn.addEventListener('click', () => setAuthMode(false));
+  if (tabSignUp) tabSignUp.addEventListener('click', () => setAuthMode(true));
+  if (createLink) {
+    createLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      setAuthMode(!isSignupMode);
+    });
+  }
+
+  // Monitor email and password entries to reveal the name field in that section
+  if (emailInput) {
+    emailInput.addEventListener('input', checkAndShowNameField);
+    emailInput.addEventListener('blur', checkAndShowNameField);
+  }
+  if (passwordInput) {
+    passwordInput.addEventListener('input', checkAndShowNameField);
+    passwordInput.addEventListener('blur', checkAndShowNameField);
+  }
+
+  // Check URL params for mode=signup
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('mode') === 'signup') {
+    setAuthMode(true);
+  }
+
+  // Form submission handler
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      if (isSignupMode) {
+        const email = emailInput?.value.trim();
+        const pass = passwordInput?.value;
+
+        if (!email) {
+          emailInput?.focus();
+          return;
+        }
+        if (!pass) {
+          passwordInput?.focus();
+          return;
+        }
+
+        // Make sure name field is displayed after entering email & password
+        if (nameGroup && nameGroup.style.display !== 'block') {
+          nameGroup.style.display = 'block';
+          nameGroup.classList.add('animate-reveal');
+        }
+
+        const name = fullNameInput?.value.trim();
+        if (!name) {
+          fullNameInput?.focus();
+          if (cardSubtitle) {
+            cardSubtitle.textContent = 'Please enter your name to complete sign up';
+            cardSubtitle.style.color = '#4ade80';
+          }
+          return;
+        }
+      }
+
       triggerCinematicTransition();
     });
   }
+
+  // Authentic Brand Social Logins
+  const socialBtns = document.querySelectorAll('.social-btn');
+  socialBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const provider = btn.getAttribute('title') || 'Social';
+      const cleanName = provider.replace(/\s+/g, '');
+      localStorage.setItem('voltsentry_is_logged_in', 'true');
+      localStorage.setItem('voltsentry_user', JSON.stringify({
+        email: `${cleanName.toLowerCase()}_user@voltsentry.com`,
+        name: `${provider} User`,
+        loggedInAt: new Date().toISOString()
+      }));
+      triggerCinematicTransition();
+    });
+  });
 
   // Window Resize
   window.addEventListener('resize', () => {

@@ -1,51 +1,68 @@
 import { useEffect, useState } from "react";
 
-function DegradationFactors() {
-  const [batteryData, setBatteryData] = useState(null);
+function DegradationFactors({ batteryData: propData }) {
+  const [batteryData, setBatteryData] = useState(propData || null);
 
   useEffect(() => {
+    if (propData !== undefined) {
+      setBatteryData(propData);
+      return;
+    }
     try {
       const savedData = localStorage.getItem("batteryData");
-
       if (savedData) {
         setBatteryData(JSON.parse(savedData));
+      } else {
+        setBatteryData(null);
       }
     } catch (error) {
       console.error("Error loading degradation data:", error);
     }
-  }, []);
+  }, [propData]);
 
-  const data = batteryData || {
-    maximumTemperature: 41,
+  const hasData = !!batteryData;
+
+  const data = hasData ? batteryData : {
+    maximumTemperature: 0,
     maximumCurrent: 0,
-    lifetimeCycles: 742,
-    maximumCellVoltageDelta: 51.2,
+    lifetimeCycles: 0,
+    maximumCellVoltageDelta: 0,
   };
 
   /*
    * These are frontend indicators based on the available CSV data.
-   * They are NOT the official backend degradation percentages.
+   * If no CSV is uploaded, contributions remain at 0%.
    */
 
-  const temperatureContribution =
-    data.maximumTemperature >= 40 ? 36 : 20;
+  const temperatureContribution = !hasData
+    ? 0
+    : data.maximumTemperature >= 40 ? 36 : 20;
 
-  const fastChargingContribution =
-    data.maximumCurrent >= 80 ? 28 : 15;
+  const fastChargingContribution = !hasData
+    ? 0
+    : data.maximumCurrent >= 80 ? 28 : 15;
 
-  const cycleContribution =
-    data.lifetimeCycles >= 700
+  const cycleContribution = !hasData
+    ? 0
+    : data.lifetimeCycles >= 700
       ? 22
       : data.lifetimeCycles >= 400
         ? 15
         : 10;
 
-  const imbalanceContribution =
-    data.maximumCellVoltageDelta >= 50
+  const imbalanceContribution = !hasData
+    ? 0
+    : data.maximumCellVoltageDelta >= 50
       ? 14
       : data.maximumCellVoltageDelta >= 30
         ? 10
         : 5;
+
+  const degradationTag = !hasData
+    ? "0% (No Data)"
+    : (data.maximumTemperature >= 40 || data.maximumCellVoltageDelta >= 50
+        ? "Moderate"
+        : "Low");
 
   return (
     <div className="degradation-factors glass-panel">
@@ -58,10 +75,7 @@ function DegradationFactors() {
         </span>
 
         <strong>
-          {data.maximumTemperature >= 40 ||
-            data.maximumCellVoltageDelta >= 50
-            ? "Moderate"
-            : "Low"}
+          {degradationTag}
         </strong>
 
       </div>
